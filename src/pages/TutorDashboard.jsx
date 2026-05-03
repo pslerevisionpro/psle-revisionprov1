@@ -150,9 +150,9 @@ export default function TutorDashboard() {
   const totalAttempts = studentResults.length
   const recentResults = [...studentResults].reverse().slice(0, 6)
   const weakSubjects  = SUBJECTS.filter(sub => { const b = bestScores[sub.name.toLowerCase()]; return b !== undefined && b < 65 })
-  const strongSubjects= SUBJECTS.filter(sub => { const b = bestScores[sub.name.toLowerCase()]; return b !== undefined && b >= 75 })
+  const strongSubjects = SUBJECTS.filter(sub => { const b = bestScores[sub.name.toLowerCase()]; return b !== undefined && b >= 75 })
   const oneWeekAgo    = new Date(Date.now() - 7*24*60*60*1000)
-  const weeklyAttempts= studentResults.filter(r => new Date(r.created_at) > oneWeekAgo).length
+  const weeklyAttempts = studentResults.filter(r => new Date(r.created_at) > oneWeekAgo).length
 
   return (
     <div className="page-container">
@@ -171,10 +171,10 @@ export default function TutorDashboard() {
           {selected && studentProfile && (
             <div style={s.statRow}>
               {[
-                { val:students.length,                                  label:'My Students' },
-                { val:totalAttempts||'—',                               label:'Attempts' },
-                { val:overallAvg>0?`${overallAvg}%`:'—',               label:'Avg Score',   color:overallAvg>0?gradeColor(overallAvg):undefined },
-                { val:weakSubjects.length||'—',                         label:'Needs Focus', color:weakSubjects.length>0?'#E67E22':undefined },
+                { val:students.length,                                    label:'My Students' },
+                { val:totalAttempts||'—',                                 label:'Attempts' },
+                { val:overallAvg>0?`${overallAvg}%`:'—',                  label:'Avg Score',   color:overallAvg>0?gradeColor(overallAvg):undefined },
+                { val:weakSubjects.length||'—',                           label:'Needs Focus', color:weakSubjects.length>0?'#E67E22':undefined },
               ].map((st,i)=>(
                 <div key={i} style={s.statBox}>
                   <span style={{ ...s.statNum, ...(st.color?{color:st.color}:{}) }}>{st.val}</span>
@@ -200,9 +200,9 @@ export default function TutorDashboard() {
                   {students.map(st => {
                     const preview  = studentPreviews[st.id] || []
                     const bestPct  = preview.length > 0 ? Math.max(...preview.map(r => clamp(r.pct))) : null
-                    const recentPct= preview.length > 0 ? clamp(preview[0].pct) : null
+                    const recentPct = preview.length > 0 ? clamp(preview[0].pct) : null
                     return (
-                      <button key={st.id} onClick={()=>setSelected(st.id)}
+                      <button key={st.id} onClick={() => setSelected(st.id)}
                         style={{ ...s.studentCard, ...(selected===st.id?s.studentCardActive:{}) }}>
                         <div style={s.studentCardTop}>
                           <div style={s.studentAvatar}>{st.full_name?.charAt(0)?.toUpperCase()||'?'}</div>
@@ -210,7 +210,7 @@ export default function TutorDashboard() {
                             <p style={s.studentName}>{st.full_name}</p>
                             <p style={s.studentGrade}>{st.grade==='std7'?'Standard 7':'Standard 6'}</p>
                           </div>
-                          {bestPct!==null&&(
+                          {bestPct !== null && (
                             <div style={{ ...s.studentBadge, background:gradeColor(bestPct)+'18', color:gradeColor(bestPct) }}>
                               {gradeLetter(bestPct)}
                             </div>
@@ -219,7 +219,7 @@ export default function TutorDashboard() {
                         <div style={{ marginTop:8 }}><MiniChart results={[...preview].reverse()}/></div>
                         <div style={s.studentFooter}>
                           <span>{preview.length} attempt{preview.length!==1?'s':''}</span>
-                          {recentPct!==null&&<span style={{ color:gradeColor(recentPct), fontWeight:700 }}>Latest: {recentPct}%</span>}
+                          {recentPct !== null && <span style={{ color:gradeColor(recentPct), fontWeight:700 }}>Latest: {recentPct}%</span>}
                         </div>
                       </button>
                     )
@@ -228,7 +228,7 @@ export default function TutorDashboard() {
               </>
             )}
 
-            {students.length===0&&!loading&&(
+            {students.length === 0 && !loading && (
               <div style={s.emptyState}>
                 <p style={{ fontSize:'2.5rem', marginBottom:12 }}>🎓</p>
                 <h3 style={{ fontFamily:'var(--font-display)', fontSize:'1.4rem', color:'var(--forest)', marginBottom:8 }}>No students added yet</h3>
@@ -236,7 +236,7 @@ export default function TutorDashboard() {
               </div>
             )}
 
-            {selected&&studentProfile&&(
+            {selected && studentProfile && (
               <>
                 <div style={{ ...s.sectionHeader, marginTop:32 }}>
                   <h2 style={s.sectionTitle}>{studentProfile.full_name}'s Performance</h2>
@@ -246,8 +246,8 @@ export default function TutorDashboard() {
                 <div style={s.summaryRow}>
                   {[
                     { label:'Total Attempts', val:totalAttempts||'—' },
-                    { label:'Average Score',  val:overallAvg>0?`${overallAvg}%`:'—', color:overallAvg>0?gradeColor(overallAvg):undefined },
-                    { label:'This Week',      val:weeklyAttempts||'—', color:weeklyAttempts>0?'#27AE60':undefined },
+                    { label:'Average Score',  val:overallAvg>0?`${overallAvg}%`:'—',            color:overallAvg>0?gradeColor(overallAvg):undefined },
+                    { label:'This Week',      val:weeklyAttempts||'—',                           color:weeklyAttempts>0?'#27AE60':undefined },
                     { label:'Overall Grade',  val:overallAvg>0?`Grade ${gradeLetter(overallAvg)}`:'—', color:overallAvg>0?gradeColor(overallAvg):undefined },
                   ].map((st,i)=>(
                     <div key={i} style={s.summaryCard}>
@@ -257,33 +257,34 @@ export default function TutorDashboard() {
                   ))}
                 </div>
 
-                {weakSubjects.length>0&&(
+                {weakSubjects.length > 0 && (
                   <div style={s.focusCard}>
                     <p style={s.focusTitle}>🎯 Focus Areas for Next Session</p>
                     <p style={s.focusDesc}>These subjects need attention in your tutoring sessions:</p>
                     <div style={s.focusList}>
-                      {weakSubjects.map(sub=>{
-                        const best=bestScores[sub.name.toLowerCase()]
-                        return (
-                          <div key={sub.key} style={s.focusItem}>
-                            <span style={s.focusEmoji}>{sub.emoji}</span>
-                            <div style={{ flex:1 }}>
-                              <p style={s.focusSubject}>{sub.name}</p>
-                              <p style={{ fontSize:'0.72rem', color:gradeColor(best) }}>Best: {best}% · Grade {gradeLetter(best)}</p>
-                            </div>
-                            <span style={{ ...s.focusBadge, background:gradeColor(best)+'18', color:gradeColor(best) }}>Needs work</span>
+                      {weakSubjects.map(sub => (
+                        <div key={sub.key} style={s.focusItem}>
+                          <span style={s.focusEmoji}>{sub.emoji}</span>
+                          <div style={{ flex:1 }}>
+                            <p style={s.focusSubject}>{sub.name}</p>
+                            <p style={{ fontSize:'0.72rem', color:gradeColor(bestScores[sub.name.toLowerCase()]) }}>
+                              Best: {bestScores[sub.name.toLowerCase()]}% · Grade {gradeLetter(bestScores[sub.name.toLowerCase()])}
+                            </p>
                           </div>
-                        )
-                      })}
+                          <span style={{ ...s.focusBadge, background:gradeColor(bestScores[sub.name.toLowerCase()])+'18', color:gradeColor(bestScores[sub.name.toLowerCase()]) }}>
+                            Needs work
+                          </span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
 
-                {strongSubjects.length>0&&(
+                {strongSubjects.length > 0 && (
                   <div style={{ ...s.focusCard, background:'#eafaf1', borderColor:'#a9e4be' }}>
                     <p style={{ ...s.focusTitle, color:'#27AE60' }}>⭐ Strong Subjects</p>
                     <div style={{ display:'flex', gap:8, flexWrap:'wrap', marginTop:8 }}>
-                      {strongSubjects.map(sub=>(
+                      {strongSubjects.map(sub => (
                         <span key={sub.key} style={{ background:'#d4edda', color:'#155724', padding:'4px 12px', borderRadius:100, fontSize:'0.78rem', fontWeight:600 }}>
                           {sub.emoji} {sub.name} · {bestScores[sub.name.toLowerCase()]}%
                         </span>
@@ -296,10 +297,10 @@ export default function TutorDashboard() {
                   <h2 style={s.sectionTitle}>Subject Breakdown</h2>
                 </div>
                 <div style={s.subGrid}>
-                  {SUBJECTS.map(sub=>{
-                    const key=sub.name.toLowerCase()
-                    const best=bestScores[key]??null
-                    const subAttempts=studentResults.filter(r=>r.subject?.toLowerCase()===key)
+                  {SUBJECTS.map(sub => {
+                    const key = sub.name.toLowerCase()
+                    const best = bestScores[key] ?? null
+                    const subAttempts = studentResults.filter(r => r.subject?.toLowerCase() === key)
                     return (
                       <div key={sub.key} style={s.subCard}>
                         <Ring pct={best??0} size={50}/>
@@ -308,9 +309,10 @@ export default function TutorDashboard() {
                             <span>{sub.emoji}</span>
                             <span style={s.subName}>{sub.name}</span>
                           </div>
-                          {best!==null
+                          {best !== null
                             ? <p style={{ fontSize:'0.7rem', fontWeight:700, color:gradeColor(best) }}>{best}% · Gr {gradeLetter(best)} · {subAttempts.length} attempt{subAttempts.length>1?'s':''}</p>
-                            : <p style={{ fontSize:'0.7rem', color:'#CCC', fontStyle:'italic' }}>Not attempted</p>}
+                            : <p style={{ fontSize:'0.7rem', color:'#CCC', fontStyle:'italic' }}>Not attempted</p>
+                          }
                         </div>
                       </div>
                     )
@@ -319,9 +321,9 @@ export default function TutorDashboard() {
 
                 <div style={{ ...s.detailCard, marginTop:20 }}>
                   <p style={s.chartTitle}>Recent Quiz Attempts</p>
-                  {recentResults.length===0
+                  {recentResults.length === 0
                     ? <p style={{ color:'#AAA', fontSize:'0.85rem', padding:'12px 0' }}>No attempts yet.</p>
-                    : recentResults.map((r,i)=>(
+                    : recentResults.map((r,i) => (
                       <div key={i} style={s.actRow}>
                         <div>
                           <p style={s.actSubject}>{r.subject}</p>
@@ -332,7 +334,8 @@ export default function TutorDashboard() {
                           <p style={{ ...s.actGrade, color:gradeColor(clamp(r.pct)) }}>{r.score}/{r.total} · Grade {gradeLetter(clamp(r.pct))}</p>
                         </div>
                       </div>
-                    ))}
+                    ))
+                  }
                 </div>
               </>
             )}
@@ -347,18 +350,18 @@ export default function TutorDashboard() {
                   <label>Student's Email</label>
                   <input type="email" placeholder="student@email.com" value={linkEmail} onChange={e=>setLinkEmail(e.target.value)} required/>
                 </div>
-                {linkErr&&<div className="alert alert-error" style={{ fontSize:'0.82rem' }}>{linkErr}</div>}
-                {linkMsg&&<div className="alert alert-success" style={{ fontSize:'0.82rem' }}>{linkMsg}</div>}
+                {linkErr && <div className="alert alert-error" style={{ fontSize:'0.82rem' }}>{linkErr}</div>}
+                {linkMsg && <div className="alert alert-success" style={{ fontSize:'0.82rem' }}>{linkMsg}</div>}
                 <button type="submit" className="btn btn-primary btn-full" disabled={linking}>
-                  {linking?'Adding…':'Add Student →'}
+                  {linking ? 'Adding…' : 'Add Student →'}
                 </button>
               </form>
             </div>
 
-            {students.length>0&&(
+            {students.length > 0 && (
               <div style={s.sideCard}>
                 <p style={s.sideCardTitle}>📋 Student Roster</p>
-                {students.map(st=>(
+                {students.map(st => (
                   <div key={st.id} style={s.kidRow}>
                     <div>
                       <p style={s.kidName}>{st.full_name}</p>
@@ -373,13 +376,13 @@ export default function TutorDashboard() {
               </div>
             )}
 
-            {students.length>1&&(
+            {students.length > 1 && (
               <div style={s.sideCard}>
                 <p style={s.sideCardTitle}>📊 Class Overview</p>
                 <div style={{ display:'flex', flexDirection:'column', gap:8, marginTop:10 }}>
-                  {students.map(st=>{
-                    const preview=studentPreviews[st.id]||[]
-                    const avg=preview.length>0?Math.round(preview.reduce((a,r)=>a+clamp(r.pct),0)/preview.length):null
+                  {students.map(st => {
+                    const preview = studentPreviews[st.id] || []
+                    const avg = preview.length > 0 ? Math.round(preview.reduce((a,r)=>a+clamp(r.pct),0)/preview.length) : null
                     return (
                       <div key={st.id} style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
                         <span style={{ fontSize:'0.82rem', fontWeight:600, color:'var(--charcoal)' }}>{st.full_name?.split(' ')[0]}</span>
@@ -387,9 +390,7 @@ export default function TutorDashboard() {
                           <div style={{ width:60, height:6, background:'#F0F0F0', borderRadius:100, overflow:'hidden' }}>
                             <div style={{ width:`${avg??0}%`, height:'100%', background:avg?gradeColor(avg):'#E0E0E0', borderRadius:100, transition:'width 0.5s ease' }}/>
                           </div>
-                          <span style={{ fontSize:'0.75rem', fontWeight:700, color:avg?gradeColor(avg):'#CCC', minWidth:28 }}>
-                            {avg!==null?`${avg}%`:'—'}
-                          </span>
+                          <span style={{ fontSize:'0.75rem', fontWeight:700, color:avg?gradeColor(avg):'#CCC', minWidth:28 }}>{avg!==null?`${avg}%`:'—'}</span>
                         </div>
                       </div>
                     )
@@ -401,10 +402,13 @@ export default function TutorDashboard() {
             <div style={s.tipCard}>
               <p style={s.tipBadge}>💡 Tutor Insight</p>
               <p style={s.tipText}>
-                {students.length===0?'Add your first student to start tracking performance.'
-                 :weakSubjects.length>0?`Focus your next session on ${weakSubjects[0]?.name} — it needs the most attention.`
-                 :totalAttempts===0?'Encourage your student to take their first quiz before the next session.'
-                 :'Your student is performing well. Consider introducing timed practice to build exam confidence.'}
+                {students.length === 0
+                  ? 'Add your first student to start tracking performance and planning sessions.'
+                  : weakSubjects.length > 0
+                  ? `Focus your next session on ${weakSubjects[0]?.name} — it needs the most attention.`
+                  : totalAttempts === 0
+                  ? 'Encourage your student to take their first quiz before the next session.'
+                  : 'Your student is performing well. Consider introducing timed practice to build exam confidence.'}
               </p>
             </div>
 
@@ -417,61 +421,61 @@ export default function TutorDashboard() {
 }
 
 const s = {
-  banner:         { background:'var(--forest)', padding:'36px 0 40px' },
-  bannerInner:    { display:'flex', justifyContent:'space-between', alignItems:'center', gap:24, flexWrap:'wrap' },
-  bannerRole:     { color:'var(--sage-lt)', fontSize:'0.78rem', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:8 },
-  bannerTitle:    { fontFamily:'var(--font-display)', fontSize:'clamp(1.6rem,3vw,2.4rem)', color:'var(--ivory)', marginBottom:8 },
-  bannerSub:      { color:'rgba(245,240,232,0.6)', fontSize:'0.9rem' },
-  statRow:        { display:'flex', gap:6, flexWrap:'wrap', flexShrink:0 },
-  statBox:        { background:'rgba(255,255,255,0.07)', border:'1px solid rgba(255,255,255,0.10)', borderRadius:10, padding:'10px 14px', textAlign:'center', minWidth:64 },
-  statNum:        { display:'block', fontFamily:'var(--font-display)', fontSize:'1.45rem', fontWeight:700, color:'var(--gold-lt)', lineHeight:1 },
-  statLabel:      { display:'block', fontSize:'0.64rem', color:'var(--sage-lt)', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.05em', marginTop:4 },
-  grid:           { display:'grid', gridTemplateColumns:'1fr 288px', gap:24, alignItems:'start' },
-  sectionHeader:  { display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 },
-  sectionTitle:   { fontFamily:'var(--font-display)', fontSize:'1.2rem', color:'var(--forest)' },
-  emptyState:     { textAlign:'center', padding:'60px 24px', background:'var(--white)', borderRadius:16, border:'1px solid var(--ivory-dk)' },
-  studentGrid:    { display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(200px,1fr))', gap:12, marginBottom:8 },
-  studentCard:    { background:'var(--white)', border:'1.5px solid var(--ivory-dk)', borderRadius:14, padding:'14px', cursor:'pointer', textAlign:'left', fontFamily:'var(--font-body)', transition:'all 0.18s ease' },
+  banner:          { background:'var(--forest)', padding:'36px 0 40px' },
+  bannerInner:     { display:'flex', justifyContent:'space-between', alignItems:'center', gap:24, flexWrap:'wrap' },
+  bannerRole:      { color:'var(--sage-lt)', fontSize:'0.78rem', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:8 },
+  bannerTitle:     { fontFamily:'var(--font-display)', fontSize:'clamp(1.6rem,3vw,2.4rem)', color:'var(--ivory)', marginBottom:8 },
+  bannerSub:       { color:'rgba(245,240,232,0.6)', fontSize:'0.9rem' },
+  statRow:         { display:'flex', gap:6, flexWrap:'wrap', flexShrink:0 },
+  statBox:         { background:'rgba(255,255,255,0.07)', border:'1px solid rgba(255,255,255,0.10)', borderRadius:10, padding:'10px 14px', textAlign:'center', minWidth:64 },
+  statNum:         { display:'block', fontFamily:'var(--font-display)', fontSize:'1.45rem', fontWeight:700, color:'var(--gold-lt)', lineHeight:1 },
+  statLabel:       { display:'block', fontSize:'0.64rem', color:'var(--sage-lt)', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.05em', marginTop:4 },
+  grid:            { display:'grid', gridTemplateColumns:'1fr 288px', gap:24, alignItems:'start' },
+  sectionHeader:   { display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 },
+  sectionTitle:    { fontFamily:'var(--font-display)', fontSize:'1.2rem', color:'var(--forest)' },
+  emptyState:      { textAlign:'center', padding:'60px 24px', background:'var(--white)', borderRadius:16, border:'1px solid var(--ivory-dk)' },
+  studentGrid:     { display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(200px,1fr))', gap:12, marginBottom:8 },
+  studentCard:     { background:'var(--white)', border:'1.5px solid var(--ivory-dk)', borderRadius:14, padding:'14px', cursor:'pointer', textAlign:'left', fontFamily:'var(--font-body)', transition:'all 0.18s ease' },
   studentCardActive:{ border:'1.5px solid var(--forest)', boxShadow:'0 0 0 3px rgba(27,61,47,0.08)' },
-  studentCardTop: { display:'flex', alignItems:'center', gap:10 },
-  studentAvatar:  { width:36, height:36, borderRadius:'50%', background:'var(--forest)', color:'var(--gold-lt)', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:700, fontSize:'1rem', flexShrink:0 },
-  studentName:    { fontSize:'0.88rem', fontWeight:700, color:'var(--charcoal)', marginBottom:2 },
-  studentGrade:   { fontSize:'0.7rem', color:'#AAA' },
-  studentBadge:   { fontSize:'0.82rem', fontWeight:800, padding:'4px 8px', borderRadius:8, flexShrink:0 },
-  studentFooter:  { display:'flex', justifyContent:'space-between', marginTop:6, fontSize:'0.7rem', color:'#AAA' },
-  summaryRow:     { display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(140px,1fr))', gap:10, marginBottom:20 },
-  summaryCard:    { background:'var(--white)', border:'1px solid var(--ivory-dk)', borderRadius:12, padding:'14px' },
-  summaryLabel:   { fontSize:'0.68rem', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.06em', color:'#AAA', marginBottom:5 },
-  summaryVal:     { fontSize:'0.92rem', fontWeight:700, color:'var(--charcoal)' },
-  focusCard:      { background:'#fff8f0', border:'1px solid #f5d5a8', borderRadius:14, padding:'16px 18px', marginBottom:16 },
-  focusTitle:     { fontSize:'0.9rem', fontWeight:700, color:'#E67E22', marginBottom:4 },
-  focusDesc:      { fontSize:'0.78rem', color:'var(--charcoal-lt)', marginBottom:12 },
-  focusList:      { display:'flex', flexDirection:'column', gap:10 },
-  focusItem:      { display:'flex', alignItems:'center', gap:10, background:'var(--white)', borderRadius:10, padding:'10px 12px', border:'1px solid #f5d5a8' },
-  focusEmoji:     { fontSize:'1.1rem' },
-  focusSubject:   { fontSize:'0.85rem', fontWeight:600, color:'var(--charcoal)', marginBottom:2 },
-  focusBadge:     { fontSize:'0.7rem', fontWeight:700, padding:'3px 8px', borderRadius:100, flexShrink:0 },
-  subGrid:        { display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(200px,1fr))', gap:10 },
-  subCard:        { display:'flex', alignItems:'center', gap:10, background:'var(--white)', border:'1px solid var(--ivory-dk)', borderRadius:12, padding:'12px 14px' },
-  subName:        { fontWeight:600, fontSize:'0.82rem', color:'var(--charcoal)' },
-  detailCard:     { background:'var(--white)', borderRadius:16, border:'1px solid var(--ivory-dk)', padding:'18px 22px', boxShadow:'0 2px 12px rgba(27,61,47,0.07)' },
-  chartTitle:     { fontFamily:'var(--font-display)', fontSize:'1.05rem', color:'var(--forest)', marginBottom:12 },
-  actRow:         { display:'flex', justifyContent:'space-between', padding:'9px 0', borderBottom:'1px solid var(--ivory-dk)' },
-  actSubject:     { fontSize:'0.83rem', fontWeight:600, color:'var(--charcoal)' },
-  actDate:        { fontSize:'0.7rem', color:'#AAA' },
-  actScore:       { fontSize:'0.88rem', fontWeight:700 },
-  actGrade:       { fontSize:'0.7rem', fontWeight:600 },
-  sideCard:       { background:'var(--white)', border:'1px solid var(--ivory-dk)', borderRadius:14, padding:'20px', marginBottom:14, boxShadow:'0 1px 6px rgba(27,61,47,0.07)' },
-  sideCardTitle:  { fontFamily:'var(--font-display)', fontSize:'1.05rem', color:'var(--forest)', marginBottom:5 },
-  sideCardDesc:   { color:'var(--charcoal-lt)', fontSize:'0.83rem', lineHeight:1.55 },
-  kidRow:         { display:'flex', justifyContent:'space-between', alignItems:'center', padding:'10px 0', borderBottom:'1px solid var(--ivory-dk)' },
-  kidName:        { fontSize:'0.88rem', fontWeight:600, color:'var(--charcoal)' },
-  kidGrade:       { fontSize:'0.72rem', color:'#AAA' },
-  viewBtn:        { background:'var(--ivory)', border:'1px solid var(--ivory-dk)', color:'var(--charcoal-lt)', borderRadius:6, padding:'4px 10px', fontSize:'0.75rem', fontWeight:600, cursor:'pointer', fontFamily:'var(--font-body)' },
-  viewBtnActive:  { background:'var(--forest)', color:'var(--gold-lt)', borderColor:'var(--forest)' },
-  removeBtn:      { background:'#fdecea', color:'var(--error)', border:'none', borderRadius:6, padding:'4px 8px', fontSize:'0.75rem', fontWeight:700, cursor:'pointer', fontFamily:'var(--font-body)' },
-  tipCard:        { background:'var(--forest)', borderRadius:14, padding:'18px', marginBottom:12 },
-  tipBadge:       { fontSize:'0.75rem', fontWeight:700, color:'var(--gold)', marginBottom:6, letterSpacing:'0.04em' },
-  tipText:        { fontSize:'0.83rem', color:'rgba(245,240,232,0.75)', lineHeight:1.6 },
-  signOut:        { width:'100%', background:'var(--white)', border:'1.5px solid var(--ivory-dk)', color:'var(--charcoal-lt)', borderRadius:10, fontFamily:'var(--font-body)', fontSize:'0.88rem', fontWeight:600, cursor:'pointer', padding:'11px' },
+  studentCardTop:  { display:'flex', alignItems:'center', gap:10 },
+  studentAvatar:   { width:36, height:36, borderRadius:'50%', background:'var(--forest)', color:'var(--gold-lt)', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:700, fontSize:'1rem', flexShrink:0 },
+  studentName:     { fontSize:'0.88rem', fontWeight:700, color:'var(--charcoal)', marginBottom:2 },
+  studentGrade:    { fontSize:'0.7rem', color:'#AAA' },
+  studentBadge:    { fontSize:'0.82rem', fontWeight:800, padding:'4px 8px', borderRadius:8, flexShrink:0 },
+  studentFooter:   { display:'flex', justifyContent:'space-between', marginTop:6, fontSize:'0.7rem', color:'#AAA' },
+  summaryRow:      { display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(140px,1fr))', gap:10, marginBottom:20 },
+  summaryCard:     { background:'var(--white)', border:'1px solid var(--ivory-dk)', borderRadius:12, padding:'14px' },
+  summaryLabel:    { fontSize:'0.68rem', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.06em', color:'#AAA', marginBottom:5 },
+  summaryVal:      { fontSize:'0.92rem', fontWeight:700, color:'var(--charcoal)' },
+  focusCard:       { background:'#fff8f0', border:'1px solid #f5d5a8', borderRadius:14, padding:'16px 18px', marginBottom:16 },
+  focusTitle:      { fontSize:'0.9rem', fontWeight:700, color:'#E67E22', marginBottom:4 },
+  focusDesc:       { fontSize:'0.78rem', color:'var(--charcoal-lt)', marginBottom:12 },
+  focusList:       { display:'flex', flexDirection:'column', gap:10 },
+  focusItem:       { display:'flex', alignItems:'center', gap:10, background:'var(--white)', borderRadius:10, padding:'10px 12px', border:'1px solid #f5d5a8' },
+  focusEmoji:      { fontSize:'1.1rem' },
+  focusSubject:    { fontSize:'0.85rem', fontWeight:600, color:'var(--charcoal)', marginBottom:2 },
+  focusBadge:      { fontSize:'0.7rem', fontWeight:700, padding:'3px 8px', borderRadius:100, flexShrink:0 },
+  subGrid:         { display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(200px,1fr))', gap:10 },
+  subCard:         { display:'flex', alignItems:'center', gap:10, background:'var(--white)', border:'1px solid var(--ivory-dk)', borderRadius:12, padding:'12px 14px' },
+  subName:         { fontWeight:600, fontSize:'0.82rem', color:'var(--charcoal)' },
+  detailCard:      { background:'var(--white)', borderRadius:16, border:'1px solid var(--ivory-dk)', padding:'18px 22px', boxShadow:'0 2px 12px rgba(27,61,47,0.07)' },
+  chartTitle:      { fontFamily:'var(--font-display)', fontSize:'1.05rem', color:'var(--forest)', marginBottom:12 },
+  actRow:          { display:'flex', justifyContent:'space-between', padding:'9px 0', borderBottom:'1px solid var(--ivory-dk)' },
+  actSubject:      { fontSize:'0.83rem', fontWeight:600, color:'var(--charcoal)' },
+  actDate:         { fontSize:'0.7rem', color:'#AAA' },
+  actScore:        { fontSize:'0.88rem', fontWeight:700 },
+  actGrade:        { fontSize:'0.7rem', fontWeight:600 },
+  sideCard:        { background:'var(--white)', border:'1px solid var(--ivory-dk)', borderRadius:14, padding:'20px', marginBottom:14, boxShadow:'0 1px 6px rgba(27,61,47,0.07)' },
+  sideCardTitle:   { fontFamily:'var(--font-display)', fontSize:'1.05rem', color:'var(--forest)', marginBottom:5 },
+  sideCardDesc:    { color:'var(--charcoal-lt)', fontSize:'0.83rem', lineHeight:1.55 },
+  kidRow:          { display:'flex', justifyContent:'space-between', alignItems:'center', padding:'10px 0', borderBottom:'1px solid var(--ivory-dk)' },
+  kidName:         { fontSize:'0.88rem', fontWeight:600, color:'var(--charcoal)' },
+  kidGrade:        { fontSize:'0.72rem', color:'#AAA' },
+  viewBtn:         { background:'var(--ivory)', border:'1px solid var(--ivory-dk)', color:'var(--charcoal-lt)', borderRadius:6, padding:'4px 10px', fontSize:'0.75rem', fontWeight:600, cursor:'pointer', fontFamily:'var(--font-body)' },
+  viewBtnActive:   { background:'var(--forest)', color:'var(--gold-lt)', borderColor:'var(--forest)' },
+  removeBtn:       { background:'#fdecea', color:'var(--error)', border:'none', borderRadius:6, padding:'4px 8px', fontSize:'0.75rem', fontWeight:700, cursor:'pointer', fontFamily:'var(--font-body)' },
+  tipCard:         { background:'var(--forest)', borderRadius:14, padding:'18px', marginBottom:12 },
+  tipBadge:        { fontSize:'0.75rem', fontWeight:700, color:'var(--gold)', marginBottom:6, letterSpacing:'0.04em' },
+  tipText:         { fontSize:'0.83rem', color:'rgba(245,240,232,0.75)', lineHeight:1.6 },
+  signOut:         { width:'100%', background:'var(--white)', border:'1.5px solid var(--ivory-dk)', color:'var(--charcoal-lt)', borderRadius:10, fontFamily:'var(--font-body)', fontSize:'0.88rem', fontWeight:600, cursor:'pointer', padding:'11px' },
 }
