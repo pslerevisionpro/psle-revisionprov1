@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate, useParams, useSearchParams, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
@@ -20,7 +20,6 @@ function shuffle(arr) {
   return a
 }
 
-// Shuffle answer options but track where the correct answer moved to
 function shuffleOptions(question) {
   const indexed = question.options.map((text, i) => ({ text, isCorrect: i === question.correct }))
   const shuffled = shuffle(indexed)
@@ -29,6 +28,13 @@ function shuffleOptions(question) {
     options: shuffled.map(o => o.text),
     correct: shuffled.findIndex(o => o.isCorrect),
   }
+}
+
+function buildQuestions(config, isGuest) {
+  if (!config) return []
+  const pool = shuffle([...config.questions])
+  const picked = isGuest ? pool.slice(0, GUEST_LIMIT) : pool
+  return picked.map(shuffleOptions)
 }
 
 export default function Quiz() {
@@ -40,13 +46,8 @@ export default function Quiz() {
   const { session } = useAuth()
   const navigate = useNavigate()
 
-  // Randomize once per quiz session using useMemo
-  const questions = useMemo(() => {
-    if (!config) return []
-    const pool = isGuest ? config.questions.slice(0, GUEST_LIMIT * 2) : config.questions
-    const picked = shuffle(pool).slice(0, isGuest ? GUEST_LIMIT : pool.length)
-    return picked.map(shuffleOptions)
-  }, [])
+  // useState lazy initializer runs exactly once — guaranteed shuffle on mount
+  const [questions] = useState(() => buildQuestions(config, isGuest))
 
   const [current, setCurrent] = useState(0)
   const [selected, setSelected] = useState(null)
@@ -72,7 +73,6 @@ export default function Quiz() {
 
   function handleSelect(optionIndex) {
     if (revealed) return
-    const isCorrect = optionIndex === question.correct
     setSelected(optionIndex)
     setRevealed(true)
     setShowExplanation(false)
@@ -80,28 +80,37 @@ export default function Quiz() {
       setShowExplanation(true)
       setTimeout(() => explanationRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100)
     }, 400)
-    // Record answer immediately when selected
-    setAnswers(prev => [...prev, { questionId: question.id, selected: optionIndex, correct: isCorrect }])
+    setAnswers(prev => [...prev, {
+      questionId: question.id,
+      selected: optionIndex,
+      correct: optionIndex === question.correct,
+    }])
   }
 
   async function handleNext() {
     if (isLast) {
-      // answers already includes this question — no double counting
-      const score = answers.filter(a => a.correct).length
-      const pct = Math.round((score / questions.length) * 100)
+      // Build final answers synchronously — don't rely on state update
+      const finalAnswers = [...answers, {
+        questionId: question.id,
+        selected,
+        correct: selected === question.correct,
+      }]
+      const score = finalAnswers.filter(a => a.correct).length
+      const total = questions.length
+      const pct = Math.round((score / total) * 100)
 
       if (session && !isGuest) {
         await supabase.from('quiz_results').insert({
           user_id: session.user.id,
           subject: config.name,
           score,
-          total: questions.length,
+          total,
           pct,
         })
       }
 
       navigate('/results', {
-        state: { score, total: questions.length, pct, subject: config.name, answers, isGuest }
+        state: { score, total, pct, subject: config.name, answers: finalAnswers, isGuest }
       })
       return
     }
