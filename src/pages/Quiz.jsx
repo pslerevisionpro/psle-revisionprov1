@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
-import { useNavigate, useParams, Link } from 'react-router-dom'
+import { useState, useRef } from 'react'
+import { useNavigate, useParams, useSearchParams, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import { scienceQuestions } from '../data/scienceQuestions'
@@ -9,11 +9,19 @@ const QUIZ_CONFIGS = {
   science: { name: 'Science', emoji: '🔬', questions: scienceQuestions },
 }
 
+const GUEST_LIMIT = 3
+
 export default function Quiz() {
   const { subject } = useParams()
+  const [searchParams] = useSearchParams()
+  const isGuest = searchParams.get('guest') === 'true' || sessionStorage.getItem('rp_guest_mode') === 'true'
+
   const config = QUIZ_CONFIGS[subject]
   const { session } = useAuth()
   const navigate = useNavigate()
+
+  const allQuestions = config?.questions || []
+  const questions = isGuest ? allQuestions.slice(0, GUEST_LIMIT) : allQuestions
 
   const [current, setCurrent] = useState(0)
   const [selected, setSelected] = useState(null)
@@ -27,16 +35,13 @@ export default function Quiz() {
       <div className="page-container">
         <Navbar />
         <div style={{ textAlign: 'center', padding: '80px 24px' }}>
-          <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--forest)', fontSize: '1.8rem' }}>
-            Subject not found
-          </h2>
-          <Link to="/subjects" className="btn btn-primary" style={{ marginTop: 20 }}>Back to Subjects</Link>
+          <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--forest)', fontSize: '1.8rem' }}>Subject not found</h2>
+          <Link to="/" className="btn btn-primary" style={{ marginTop: 20 }}>Go Home</Link>
         </div>
       </div>
     )
   }
 
-  const questions = config.questions
   const question = questions[current]
   const isLast = current === questions.length - 1
 
@@ -49,15 +54,20 @@ export default function Quiz() {
       setShowExplanation(true)
       setTimeout(() => explanationRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100)
     }, 400)
-    setAnswers(prev => [...prev, { questionId: question.id, selected: optionIndex, correct: optionIndex === question.correct }])
+    setAnswers(prev => [...prev, {
+      questionId: question.id,
+      selected: optionIndex,
+      correct: optionIndex === question.correct
+    }])
   }
 
   async function handleNext() {
     if (isLast) {
-      // Save result
-      const score = answers.filter(a => a.correct).length
+      const finalAnswers = [...answers, { questionId: question.id, selected, correct: selected === question.correct }]
+      const score = finalAnswers.filter(a => a.correct).length
       const pct = Math.round((score / questions.length) * 100)
-      if (session) {
+
+      if (session && !isGuest) {
         await supabase.from('quiz_results').insert({
           user_id: session.user.id,
           subject: config.name,
@@ -66,7 +76,10 @@ export default function Quiz() {
           pct,
         })
       }
-      navigate('/results', { state: { score, total: questions.length, pct, subject: config.name, answers } })
+
+      navigate('/results', {
+        state: { score, total: questions.length, pct, subject: config.name, answers: finalAnswers, isGuest }
+      })
       return
     }
     setCurrent(c => c + 1)
@@ -76,18 +89,29 @@ export default function Quiz() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const progress = ((current) / questions.length) * 100
+  const progress = (current / questions.length) * 100
 
   return (
     <div className="page-container">
       <Navbar />
 
-      {/* Progress header */}
+      {isGuest && (
+        <div style={styles.guestBanner}>
+          <div className="content-wrapper" style={styles.guestBannerInner}>
+            <span>🎮 <strong>Free Trial</strong> — Question {current + 1} of {GUEST_LIMIT} · No account needed</span>
+            <Link to="/parent-auth" style={styles.guestBannerLink}>Unlock all questions →</Link>
+          </div>
+        </div>
+      )}
+
       <div style={styles.progressHeader}>
         <div className="content-wrapper">
           <div style={styles.progressMeta}>
             <span style={styles.subject}>{config.emoji} {config.name}</span>
-            <span style={styles.counter}>Question {current + 1} of {questions.length}</span>
+            <span style={styles.counter}>
+              Question {current + 1} of {questions.length}
+              {isGuest && <span style={styles.guestTag}> · Free Trial</span>}
+            </span>
           </div>
           <div className="progress-bar" style={{ marginTop: 10 }}>
             <div className="progress-fill" style={{ width: `${progress}%` }} />
@@ -96,12 +120,10 @@ export default function Quiz() {
       </div>
 
       <div className="content-wrapper" style={{ paddingTop: 40, paddingBottom: 60, maxWidth: 760 }}>
-        {/* Question card */}
         <div className="card card-elevated" style={styles.questionCard}>
           <p style={styles.questionLabel}>Question {current + 1}</p>
           <h2 style={styles.questionText}>{question.question}</h2>
 
-          {/* Options */}
           <div style={styles.options}>
             {question.options.map((option, i) => {
               let optStyle = styles.option
@@ -112,7 +134,6 @@ export default function Quiz() {
               } else if (selected === i) {
                 optStyle = { ...styles.option, ...styles.optionSelected }
               }
-
               return (
                 <button key={i} style={optStyle} onClick={() => handleSelect(i)} disabled={revealed}>
                   <span style={styles.optionLetter}>{String.fromCharCode(65 + i)}</span>
@@ -124,13 +145,10 @@ export default function Quiz() {
             })}
           </div>
 
-          {/* Explanation */}
           {showExplanation && (
             <div ref={explanationRef} style={styles.explanation}>
               <div style={styles.explanationHeader}>
-                <span style={styles.explanationIcon}>
-                  {selected === question.correct ? '🎉' : '💡'}
-                </span>
+                <span style={styles.explanationIcon}>{selected === question.correct ? '🎉' : '💡'}</span>
                 <strong style={styles.explanationTitle}>
                   {selected === question.correct ? 'Correct!' : `Correct answer: ${question.options[question.correct]}`}
                 </strong>
@@ -140,7 +158,6 @@ export default function Quiz() {
           )}
         </div>
 
-        {/* Navigation */}
         {revealed && (
           <div style={{ textAlign: 'right', marginTop: 20 }}>
             <button className="btn btn-primary" onClick={handleNext} style={{ padding: '14px 32px', fontSize: '1rem' }}>
@@ -149,11 +166,8 @@ export default function Quiz() {
           </div>
         )}
 
-        {/* Exit */}
         <div style={{ textAlign: 'center', marginTop: 24 }}>
-          <Link to="/subjects" style={{ color: 'var(--charcoal-lt)', fontSize: '0.85rem' }}>
-            ← Exit Quiz
-          </Link>
+          <Link to="/" style={{ color: 'var(--charcoal-lt)', fontSize: '0.85rem' }}>← Exit Quiz</Link>
         </div>
       </div>
     </div>
@@ -161,23 +175,19 @@ export default function Quiz() {
 }
 
 const styles = {
+  guestBanner: { background: 'var(--gold)', padding: '10px 0' },
+  guestBannerInner: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10, fontSize: '0.88rem', color: 'var(--forest)', fontWeight: 500 },
+  guestBannerLink: { fontWeight: 700, color: 'var(--forest)', textDecoration: 'underline', fontSize: '0.88rem' },
+  guestTag: { color: 'var(--gold-dk)', fontWeight: 600 },
   progressHeader: { background: 'var(--white)', borderBottom: '1px solid var(--ivory-dk)', padding: '16px 0' },
   progressMeta: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
-  subject: { fontWeight: 700, fontSize: '0.9rem', color: 'var(--forest)', letterSpacing: '0.02em' },
+  subject: { fontWeight: 700, fontSize: '0.9rem', color: 'var(--forest)' },
   counter: { fontSize: '0.85rem', color: 'var(--charcoal-lt)', fontWeight: 500 },
-
   questionCard: { padding: '36px 40px' },
   questionLabel: { fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--gold-dk)', marginBottom: 12 },
   questionText: { fontFamily: 'var(--font-display)', fontSize: 'clamp(1.3rem, 2.5vw, 1.7rem)', color: 'var(--charcoal)', marginBottom: 32, lineHeight: 1.4 },
-
   options: { display: 'flex', flexDirection: 'column', gap: 12 },
-  option: {
-    display: 'flex', alignItems: 'center', gap: 14, padding: '16px 20px',
-    border: '2px solid var(--ivory-dk)', borderRadius: 'var(--radius-sm)',
-    background: 'var(--white)', cursor: 'pointer', textAlign: 'left',
-    transition: 'all 0.18s ease', fontFamily: 'var(--font-body)',
-    fontSize: '0.97rem', color: 'var(--charcoal)',
-  },
+  option: { display: 'flex', alignItems: 'center', gap: 14, padding: '16px 20px', border: '2px solid var(--ivory-dk)', borderRadius: 'var(--radius-sm)', background: 'var(--white)', cursor: 'pointer', textAlign: 'left', transition: 'all 0.18s ease', fontFamily: 'var(--font-body)', fontSize: '0.97rem', color: 'var(--charcoal)' },
   optionSelected: { borderColor: 'var(--forest-lt)', background: '#eef7f4' },
   optionCorrect: { borderColor: 'var(--success)', background: '#eafaf1', color: 'var(--success)', cursor: 'default' },
   optionWrong: { borderColor: 'var(--error)', background: '#fdecea', color: 'var(--error)', cursor: 'default' },
@@ -186,13 +196,7 @@ const styles = {
   optionText: { flex: 1 },
   optionMark: { color: 'var(--success)', fontWeight: 700, fontSize: '1.1rem' },
   optionMarkWrong: { color: 'var(--error)', fontWeight: 700, fontSize: '1.1rem' },
-
-  explanation: {
-    marginTop: 28, padding: '20px 24px',
-    background: 'linear-gradient(135deg, #eef7f4 0%, #f5f0e8 100%)',
-    borderRadius: 'var(--radius-sm)', borderLeft: '4px solid var(--forest-lt)',
-    animation: 'fadeSlideIn 0.3s ease',
-  },
+  explanation: { marginTop: 28, padding: '20px 24px', background: 'linear-gradient(135deg, #eef7f4 0%, #f5f0e8 100%)', borderRadius: 'var(--radius-sm)', borderLeft: '4px solid var(--forest-lt)' },
   explanationHeader: { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 },
   explanationIcon: { fontSize: '1.2rem' },
   explanationTitle: { color: 'var(--forest)', fontFamily: 'var(--font-display)', fontSize: '1.1rem' },

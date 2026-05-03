@@ -11,6 +11,14 @@ import SubjectList from './pages/SubjectList'
 import Quiz from './pages/Quiz'
 import Results from './pages/Results'
 
+function GuestOrAuth({ children }) {
+  const isGuest = typeof window !== 'undefined' &&
+    (new URLSearchParams(window.location.search).get('guest') === 'true' ||
+     sessionStorage.getItem('rp_guest_mode') === 'true')
+  if (isGuest) return children
+  return <ProtectedRoute>{children}</ProtectedRoute>
+}
+
 export default function App() {
   return (
     <AuthProvider>
@@ -19,13 +27,10 @@ export default function App() {
         <Route path="/student-auth" element={<StudentAuth />} />
         <Route path="/parent-auth" element={<ParentAuth />} />
         <Route path="/tutor-auth" element={<TutorAuth />} />
-
+        <Route path="/quiz/:subject" element={<GuestOrAuth><Quiz /></GuestOrAuth>} />
+        <Route path="/results" element={<GuestOrAuth><Results /></GuestOrAuth>} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/subjects" element={<ProtectedRoute><SubjectList /></ProtectedRoute>} />
-        <Route path="/quiz/:subject" element={<ProtectedRoute><Quiz /></ProtectedRoute>} />
-        <Route path="/results" element={<ProtectedRoute><Results /></ProtectedRoute>} />
-
-        {/* 404 fallback */}
         <Route path="*" element={
           <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-body)', gap: 16 }}>
             <span style={{ fontSize: '3rem' }}>📭</span>
