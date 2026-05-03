@@ -49,7 +49,7 @@ function ScoreChart({ data }) {
   const TOP    = 20   // space for value label above bar
   const LEFT   = 28   // y-axis label space
   const TOTAL_H = H + BOTTOM + TOP
-  const totalW  = data.length * (BAR_W + GAP) - GAP + LEFT
+  const totalW = Math.max(data.length * (BAR_W + GAP) - GAP + LEFT, 160)
 
   const gridLines = [0, 25, 50, 75, 100]
 
@@ -139,7 +139,7 @@ function ScoreChart({ data }) {
 }
 
 const chart = {
-  wrap: {
+  wrap: { maxWidth: 360, margin: '0 auto',
     padding: '8px 0 4px',
     overflowX: 'auto',
   },
