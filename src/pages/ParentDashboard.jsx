@@ -126,13 +126,10 @@ export default function ParentDashboard() {
   }
 
   async function loadChildData(childId) {
-    console.log('Loading child data for:', childId)
-    const [{ data: prof, error: profErr }, { data: results, error: resErr }] = await Promise.all([
+    const [{ data: prof }, { data: results }] = await Promise.all([
       supabase.from('profiles').select('*').eq('id', childId).single(),
       supabase.from('quiz_results').select('*').eq('user_id', childId).order('created_at', { ascending: true })
     ])
-    console.log('Profile:', prof, 'Error:', profErr)
-    console.log('Results:', results, 'Error:', resErr)
     if (prof)    setChildProfile(prof)
     if (results) setChildResults(results)
     setNudgeSent(false)
