@@ -14,7 +14,7 @@ const SUBJECTS = [
 ]
 
 export default function Dashboard() {
-  const { session, profile } = useAuth()
+  const { session, profile, signOut } = useAuth()
   const [recentScores, setRecentScores] = useState([])
   const navigate = useNavigate()
 
@@ -40,7 +40,6 @@ export default function Dashboard() {
     <div className="page-container">
       <Navbar />
       <div style={styles.wrapper}>
-        {/* Welcome banner */}
         <div style={styles.banner}>
           <div style={styles.bannerInner} className="content-wrapper">
             <div>
@@ -52,7 +51,7 @@ export default function Dashboard() {
                 {role === 'student'
                   ? `Keep going — you're ${overallProgress}% through your revision targets.`
                   : role === 'parent'
-                  ? 'Your child\'s progress summary is below.'
+                  ? "Your child's progress summary is below."
                   : 'Manage your students and track their performance.'}
               </p>
             </div>
@@ -67,7 +66,6 @@ export default function Dashboard() {
 
         <div className="content-wrapper" style={{ paddingTop: 40, paddingBottom: 60 }}>
           <div style={styles.grid}>
-            {/* Subjects */}
             <div style={{ gridColumn: 'span 2' }}>
               <div style={styles.sectionHeader}>
                 <h2 style={styles.sectionTitle}>Subjects</h2>
@@ -92,9 +90,7 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Sidebar */}
             <div>
-              {/* Quick action */}
               <div style={styles.quickAction} className="card card-elevated">
                 <h3 style={styles.qaTitle}>🚀 Quick Revision</h3>
                 <p style={styles.qaDesc}>Jump straight into a Science practice session.</p>
@@ -103,7 +99,6 @@ export default function Dashboard() {
                 </Link>
               </div>
 
-              {/* Recent activity */}
               <div style={styles.recentCard} className="card">
                 <h3 style={styles.qaTitle}>📋 Recent Activity</h3>
                 {recentScores.length === 0 ? (
@@ -123,13 +118,20 @@ export default function Dashboard() {
                 )}
               </div>
 
-              {/* Tip */}
               <div style={styles.tipCard}>
                 <p style={styles.tipBadge}>💡 Study Tip</p>
                 <p style={styles.tipText}>
                   Consistent short sessions beat long cramming. Aim for 20 minutes per subject, every day.
                 </p>
               </div>
+
+              <button
+                onClick={async () => { await signOut(); navigate('/') }}
+                className="btn btn-full"
+                style={styles.signOutBtn}
+              >
+                ← Sign Out
+              </button>
             </div>
           </div>
         </div>
@@ -149,7 +151,6 @@ const styles = {
   statRing: { width: 96, height: 96, borderRadius: '50%', border: '3px solid var(--gold)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'rgba(201,168,76,0.1)' },
   statNumber: { fontFamily: 'var(--font-display)', fontSize: '1.5rem', color: 'var(--gold-lt)', fontWeight: 700 },
   statLabel: { fontSize: '0.7rem', color: 'var(--sage-lt)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' },
-
   grid: { display: 'grid', gridTemplateColumns: '1fr 320px', gap: 28, alignItems: 'start' },
   sectionHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
   sectionTitle: { fontFamily: 'var(--font-display)', fontSize: '1.4rem', color: 'var(--forest)' },
@@ -159,17 +160,15 @@ const styles = {
   subInfo: { flex: 1, minWidth: 0 },
   subName: { fontWeight: 600, fontSize: '0.95rem', color: 'var(--charcoal)', marginBottom: 2 },
   subPct: { fontSize: '0.75rem', color: 'var(--charcoal-lt)', marginTop: 4 },
-
   quickAction: { padding: '24px', marginBottom: 16 },
   qaTitle: { fontFamily: 'var(--font-display)', fontSize: '1.2rem', color: 'var(--forest)', marginBottom: 6 },
   qaDesc: { color: 'var(--charcoal-lt)', fontSize: '0.88rem', lineHeight: 1.6 },
-
   recentCard: { marginBottom: 16 },
   activityRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid var(--ivory-dk)' },
   activitySubject: { fontSize: '0.88rem', fontWeight: 600, color: 'var(--charcoal)' },
   activityScore: { fontSize: '0.88rem', fontWeight: 700 },
-
-  tipCard: { background: 'var(--forest)', borderRadius: 'var(--radius-md)', padding: '20px', color: 'var(--ivory)' },
+  tipCard: { background: 'var(--forest)', borderRadius: 'var(--radius-md)', padding: '20px', color: 'var(--ivory)', marginBottom: 12 },
   tipBadge: { fontSize: '0.8rem', fontWeight: 700, color: 'var(--gold)', marginBottom: 8, letterSpacing: '0.04em' },
   tipText: { fontSize: '0.88rem', color: 'rgba(245,240,232,0.75)', lineHeight: 1.65 },
+  signOutBtn: { background: 'var(--white)', border: '1.5px solid var(--ivory-dk)', color: 'var(--charcoal-lt)', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', padding: '12px' },
 }
