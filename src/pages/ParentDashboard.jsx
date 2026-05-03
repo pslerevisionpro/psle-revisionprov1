@@ -107,14 +107,20 @@ export default function ParentDashboard() {
 
   async function loadChildren() {
     setLoading(true)
-    const { data } = await supabase
+    const { data: links } = await supabase
       .from('parent_child_links')
-      .select('child_id, profiles:child_id(id, full_name, grade, email)')
+      .select('child_id')
       .eq('parent_id', session.user.id)
-    if (data) {
-      const kids = data.map(d => d.profiles).filter(Boolean)
-      setChildren(kids)
-      if (kids.length > 0 && !selected) setSelected(kids[0].id)
+    if (links && links.length > 0) {
+      const childIds = links.map(l => l.child_id)
+      const { data: profiles } = await supabase
+        .from('profiles')
+        .select('id, full_name, grade, email')
+        .in('id', childIds)
+      if (profiles) {
+        setChildren(profiles)
+        if (profiles.length > 0 && !selected) setSelected(profiles[0].id)
+      }
     }
     setLoading(false)
   }
