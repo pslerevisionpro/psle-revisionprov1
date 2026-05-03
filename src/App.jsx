@@ -32,9 +32,9 @@ export default function App() {
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/subjects" element={<ProtectedRoute><SubjectList /></ProtectedRoute>} />
         <Route path="*" element={
-          <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-body)', gap: 16 }}>
-            <span style={{ fontSize: '3rem' }}>📭</span>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.8rem', color: 'var(--forest)' }}>Page not found</h2>
+          <div style={{ minHeight:'100vh', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', fontFamily:'var(--font-body)', gap:16 }}>
+            <span style={{ fontSize:'3rem' }}>📭</span>
+            <h2 style={{ fontFamily:'var(--font-display)', fontSize:'1.8rem', color:'var(--forest)' }}>Page not found</h2>
             <a href="/" className="btn btn-primary">Go Home</a>
           </div>
         } />

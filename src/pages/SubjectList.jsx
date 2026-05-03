@@ -8,6 +8,8 @@ const SUBJECTS = [
   { key: 'setswana', name: 'Setswana', emoji: '🗣️', description: 'Reading, writing, and oral comprehension in Setswana.', topics: ['Go Bala', 'Go Kwala', 'Puo ya Molomo', 'Dipadi'], available: false, color: '#1B3D2F' },
   { key: 'social', name: 'Social Studies', emoji: '🌍', description: 'Botswana geography, history, civics, and the wider world.', topics: ['History', 'Geography', 'Civics', 'Economics'], available: false, color: '#2D5A45' },
   { key: 'rme', name: 'RME', emoji: '📖', description: 'Religious and moral education — ethics, values, and faiths.', topics: ['Values', 'World Religions', 'Moral Reasoning', 'Community'], available: false, color: '#3F7A5E' },
+  { key: 'agriculture', name: 'Agriculture', emoji: '🌱', description: 'Farming, crops, soils, livestock and agricultural practices in Botswana.', topics: ['Soils & Crops', 'Livestock', 'Farm Management', 'Irrigation'], available: false, color: '#5C7A3E' },
+  { key: 'agriculture', name: 'Agriculture', emoji: '🌱', description: 'Farming, crops, soils, livestock, and agricultural practices in Botswana.', topics: ['Soils', 'Crops', 'Livestock', 'Farm Management'], available: false, color: '#5C7A3E' },
 ]
 
 export default function SubjectList() {

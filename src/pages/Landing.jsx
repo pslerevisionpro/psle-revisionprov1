@@ -17,6 +17,7 @@ const subjects = [
   { name: 'Science', emoji: '🔬', color: '#1B3D2F' },
   { name: 'Social Studies', emoji: '🌍', color: '#2D5A45' },
   { name: 'RME', emoji: '📖', color: '#3F7A5E' },
+  { name: 'Agriculture', emoji: '🌱', color: '#5C7A3E' },
 ]
 
 export default function Landing() {
