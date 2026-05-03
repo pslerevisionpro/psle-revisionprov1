@@ -70,10 +70,10 @@ function ScoreBarChart({ data }) {
     )
   }
   const max = 100
-  const barW = 36
-  const gap = 16
-  const h = 140
-  const labelH = 32
+  const barW = 7
+  const gap = 10
+  const h = 84
+  const labelH = 28
   const totalW = data.length * (barW + gap) - gap
   return (
     <svg width="100%" viewBox={`0 0 ${Math.max(totalW, 280)} ${h + labelH}`} style={{ overflow: 'visible' }}>
