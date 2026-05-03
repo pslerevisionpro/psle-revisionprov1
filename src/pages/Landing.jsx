@@ -24,6 +24,20 @@ export default function Landing() {
     <div className="page-container">
       <Navbar />
 
+      {/* Sign In Bar */}
+      <div style={styles.signInBar}>
+        <div className="content-wrapper" style={styles.signInBarInner}>
+          <span style={styles.signInBarText}>Already have an account?</span>
+          <div style={styles.signInBarLinks}>
+            <Link to="/student-auth" style={styles.signInLink}>🎒 Student Sign In</Link>
+            <span style={styles.signInDivider}>|</span>
+            <Link to="/parent-auth" style={styles.signInLink}>👨‍👩‍👧 Parent Sign In</Link>
+            <span style={styles.signInDivider}>|</span>
+            <Link to="/tutor-auth" style={styles.signInLink}>🎓 Tutor Sign In</Link>
+          </div>
+        </div>
+      </div>
+
       {/* Hero */}
       <section style={styles.hero}>
         <div style={styles.heroBg} aria-hidden="true" />
@@ -36,7 +50,7 @@ export default function Landing() {
             <span style={styles.heroTitleGold}>Score higher.</span>
           </h1>
           <p style={styles.heroSubtitle}>
-            PSLE RevisionPro gives every Botswana student expert-quality practice questions, 
+            PSLE RevisionPro gives every Botswana student expert-quality practice questions,
             instant feedback, and progress tracking — all aligned to the national curriculum.
           </p>
           <div style={styles.heroButtons}>
@@ -99,7 +113,7 @@ export default function Landing() {
               title="Students"
               desc="Practice questions, mock exams, instant explanations, and a personal dashboard tracking your progress by subject."
               link="/student-auth"
-              linkLabel="Student Sign Up"
+              linkLabel="Sign In / Sign Up"
               accent="var(--forest)"
             />
             <PortalCard
@@ -107,7 +121,7 @@ export default function Landing() {
               title="Parents"
               desc="Monitor your child's performance, review activity reports, manage consent settings, and ensure they're revision-ready."
               link="/parent-auth"
-              linkLabel="Parent Sign Up"
+              linkLabel="Sign In / Sign Up"
               accent="var(--gold-dk)"
             />
             <PortalCard
@@ -115,7 +129,7 @@ export default function Landing() {
               title="Tutors"
               desc="Track multiple students, identify weak areas, assign targeted practice, and supplement your tutoring sessions with data."
               link="/tutor-auth"
-              linkLabel="Tutor Sign Up"
+              linkLabel="Sign In / Register"
               accent="var(--sage)"
             />
           </div>
@@ -176,6 +190,27 @@ function PortalCard({ emoji, title, desc, link, linkLabel, accent }) {
 }
 
 const styles = {
+  signInBar: {
+    background: 'var(--ivory-dk)',
+    borderBottom: '1px solid var(--ivory-dk)',
+    padding: '10px 0',
+  },
+  signInBarInner: {
+    display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12,
+  },
+  signInBarText: {
+    fontSize: '0.85rem', color: 'var(--charcoal-lt)', fontWeight: 500,
+  },
+  signInBarLinks: {
+    display: 'flex', alignItems: 'center', gap: 12,
+  },
+  signInLink: {
+    fontSize: '0.85rem', fontWeight: 600, color: 'var(--forest)', textDecoration: 'none',
+    transition: 'color 0.2s',
+  },
+  signInDivider: {
+    color: 'var(--ivory-dk)', fontSize: '0.85rem',
+  },
   hero: {
     background: 'var(--forest)',
     position: 'relative',
@@ -187,23 +222,17 @@ const styles = {
     background: 'radial-gradient(ellipse 70% 60% at 70% 50%, rgba(143,175,126,0.12) 0%, transparent 70%)',
     pointerEvents: 'none',
   },
-  heroContent: {
-    position: 'relative',
-    maxWidth: 640,
-  },
+  heroContent: { position: 'relative', maxWidth: 640 },
   heroBadge: {
     display: 'inline-flex', alignItems: 'center', gap: 6,
     background: 'rgba(201,168,76,0.15)', border: '1px solid rgba(201,168,76,0.35)',
     color: 'var(--gold-lt)', padding: '5px 14px', borderRadius: 100,
-    fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.06em',
-    marginBottom: 20,
+    fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.06em', marginBottom: 20,
   },
   heroTitle: {
     fontFamily: 'var(--font-display)',
     fontSize: 'clamp(2.4rem, 5vw, 3.6rem)',
-    fontWeight: 700,
-    color: 'var(--ivory)',
-    marginBottom: 20,
+    fontWeight: 700, color: 'var(--ivory)', marginBottom: 20,
   },
   heroTitleGold: { color: 'var(--gold)' },
   heroSubtitle: {
@@ -212,37 +241,22 @@ const styles = {
   },
   heroButtons: { display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 20 },
   heroNote: { fontSize: '0.8rem', color: 'rgba(245,240,232,0.45)' },
-
-  subjectsStrip: {
-    background: 'var(--ivory-dk)', padding: '20px 0',
-    borderBottom: '1px solid var(--ivory-dk)',
-  },
-  stripLabel: {
-    fontSize: '0.78rem', fontWeight: 600, textTransform: 'uppercase',
-    letterSpacing: '0.08em', color: 'var(--charcoal-lt)', marginBottom: 12,
-  },
+  subjectsStrip: { background: 'var(--ivory-dk)', padding: '20px 0', borderBottom: '1px solid var(--ivory-dk)' },
+  stripLabel: { fontSize: '0.78rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--charcoal-lt)', marginBottom: 12 },
   subjectPills: { display: 'flex', gap: 10, flexWrap: 'wrap' },
-  pill: {
-    padding: '6px 14px', borderRadius: 100, fontSize: '0.83rem',
-    fontWeight: 600, color: 'var(--ivory)', letterSpacing: '0.02em',
-  },
-
+  pill: { padding: '6px 14px', borderRadius: 100, fontSize: '0.83rem', fontWeight: 600, color: 'var(--ivory)', letterSpacing: '0.02em' },
   sectionHeader: { textAlign: 'center', marginBottom: 48 },
   sectionTitle: { fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.4rem)', color: 'var(--forest)', marginBottom: 12 },
   sectionSubtitle: { color: 'var(--charcoal-lt)', fontSize: '1rem', maxWidth: 520, margin: '0 auto' },
-
   featuresGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 20 },
-  featureCard: { padding: '28px', transition: 'transform 0.2s, box-shadow 0.2s' },
+  featureCard: { padding: '28px' },
   featureIcon: { fontSize: '1.8rem', marginBottom: 14 },
   featureTitle: { fontFamily: 'var(--font-display)', fontSize: '1.25rem', color: 'var(--forest)', marginBottom: 8 },
   featureDesc: { color: 'var(--charcoal-lt)', fontSize: '0.92rem', lineHeight: 1.65 },
-
   portalsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 24 },
-
   ctaBanner: { background: 'var(--forest)', padding: '70px 0' },
-
   footer: { background: 'var(--ivory-dk)', padding: '40px 0', borderTop: '1px solid var(--ivory-dk)' },
   footerInner: { display: 'flex', flexWrap: 'wrap', gap: 24, justifyContent: 'space-between', alignItems: 'center' },
   footerLinks: { display: 'flex', gap: 24 },
-  footerLink: { color: 'var(--charcoal-lt)', fontSize: '0.9rem', fontWeight: 500, transition: 'color 0.2s' },
+  footerLink: { color: 'var(--charcoal-lt)', fontSize: '0.9rem', fontWeight: 500 },
 }
