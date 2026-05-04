@@ -5,13 +5,13 @@ import { useAuth } from '../context/AuthContext'
 import Navbar from '../components/Navbar'
 
 const SUBJECTS = [
-  { key: 'science',     name: 'Science',       emoji: '🔬', color: '#1B3D2F', available: true  },
-  { key: 'english',     name: 'English',        emoji: '✏️', color: '#2D5A45', available: false },
-  { key: 'maths',       name: 'Mathematics',    emoji: '🔢', color: '#3F7A5E', available: false },
-  { key: 'setswana',    name: 'Setswana',       emoji: '🗣️', color: '#1B3D2F', available: false },
-  { key: 'social',      name: 'Social Studies', emoji: '🌍', color: '#2D5A45', available: false },
-  { key: 'agriculture', name: 'Agriculture',    emoji: '🌱', color: '#5C7A3E', available: false },
-  { key: 'rme',         name: 'RME',            emoji: '📖', color: '#3F7A5E', available: false },
+  { key: 'science',     name: 'Science',       emoji: '🔬', color: '#1B3D2F', available: true },
+  { key: 'english',     name: 'English',        emoji: '✏️', color: '#2D5A45', available: true },
+  { key: 'maths',       name: 'Mathematics',    emoji: '🔢', color: '#3F7A5E', available: true },
+  { key: 'setswana',    name: 'Setswana',       emoji: '🗣️', color: '#1B3D2F', available: true },
+  { key: 'social',      name: 'Social Studies', emoji: '🌍', color: '#2D5A45', available: true },
+  { key: 'agriculture', name: 'Agriculture',    emoji: '🌱', color: '#5C7A3E', available: true },
+  { key: 'rme',         name: 'RME',            emoji: '📖', color: '#3F7A5E', available: true },
 ]
 
 function clamp(v) { return Math.min(100, Math.max(0, v ?? 0)) }

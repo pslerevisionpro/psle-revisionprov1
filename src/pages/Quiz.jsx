@@ -3,10 +3,22 @@ import { useNavigate, useParams, useSearchParams, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import { scienceQuestions } from '../data/scienceQuestions'
+import { mathsQuestions } from '../data/mathsQuestions'
+import { englishQuestions } from '../data/englishQuestions'
+import { setswanaQuestions } from '../data/setswanaQuestions'
+import { agricultureQuestions } from '../data/agricultureQuestions'
+import { socialStudiesQuestions } from '../data/socialStudiesQuestions'
+import { rmeQuestions } from '../data/rmeQuestions'
 import Navbar from '../components/Navbar'
 
 const QUIZ_CONFIGS = {
-  science: { name: 'Science', emoji: '🔬', questions: scienceQuestions },
+  science:     { name: 'Science',       emoji: '🔬', questions: scienceQuestions },
+  maths:       { name: 'Mathematics',   emoji: '🔢', questions: mathsQuestions },
+  english:     { name: 'English',       emoji: '✏️', questions: englishQuestions },
+  setswana:    { name: 'Setswana',      emoji: '🗣️', questions: setswanaQuestions },
+  agriculture: { name: 'Agriculture',   emoji: '🌱', questions: agricultureQuestions },
+  social:      { name: 'Social Studies',emoji: '🌍', questions: socialStudiesQuestions },
+  rme:         { name: 'RME',           emoji: '📖', questions: rmeQuestions },
 }
 
 const GUEST_LIMIT = 3

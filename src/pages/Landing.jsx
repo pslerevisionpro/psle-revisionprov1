@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 
 const features = [
-  { icon: '📚', title: 'All 6 PSLE Subjects', desc: 'English, Setswana, Maths, Science, Social Studies & RME — all in one place.' },
+  { icon: '📚', title: 'All 6 PSLE Subjects', desc: 'English, Setswana, Maths, Science, Social Studies, Agriculture & RME — all 7 subjects.' },
   { icon: '🧠', title: 'Instant Explanations', desc: 'Every question includes a clear explanation so students learn from mistakes, not just scores.' },
   { icon: '📊', title: 'Progress Tracking', desc: 'Parents and tutors can follow each student\'s improvement over time with visual dashboards.' },
   { icon: '🏆', title: 'Mock Exams', desc: 'Timed practice exams that mirror the real PSLE format to build confidence and exam readiness.' },
@@ -16,7 +16,7 @@ const subjects = [
   { name: 'Mathematics', emoji: '🔢', color: '#3F7A5E' },
   { name: 'Science', emoji: '🔬', color: '#1B3D2F' },
   { name: 'Social Studies', emoji: '🌍', color: '#2D5A45' },
-  { name: 'RME', emoji: '📖', color: '#3F7A5E' },
+  { name: 'RME',         emoji: '📖', color: '#3F7A5E' },
   { name: 'Agriculture', emoji: '🌱', color: '#5C7A3E' },
 ]
 
