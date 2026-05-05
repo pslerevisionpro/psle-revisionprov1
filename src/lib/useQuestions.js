@@ -31,16 +31,24 @@ export function useQuestions(subject, options = {}) {
       setError(null)
 
       // Map app subject slug → DB subject_area values
-      const SUBJECT_MAP = {
-        science:     ['Ecology','Conservation','Environment & Pollution',
-                      'Solutions & Mixtures','Hard & Soft Water','Weather & Climate',
-                      'Earth & Space','States of Matter','Elements & Compounds',
-                      'Energy Concepts','Heat Transfer','Light','Sound',
-                      'Acids & Alkalis','Forces & Friction','Levers & Machines',
-                      'Electric Circuits','Lightning & Static','Energy Sources',
-                      'Human Reproduction','Science & Technology','Science Careers',
-                      'Science Skills','General Science'],
-      }
+    const SUBJECT_MAP = {
+  science: [
+    'Ecology','Conservation','Environment & Pollution',
+    'Solutions & Mixtures','Hard & Soft Water','Weather & Climate',
+    'Earth & Space','States of Matter','Elements & Compounds',
+    'Energy Concepts','Heat Transfer','Light','Sound',
+    'Acids & Alkalis','Forces & Friction','Levers & Machines',
+    'Electric Circuits','Lightning & Static','Energy Sources',
+    'Human Reproduction','Science & Technology','Science Careers',
+    'Science Skills','General Science'
+  ],
+  maths:       [],
+  english:     [],
+  setswana:    [],
+  agriculture: [],
+  social:      [],
+  rme:         [],
+}
 
       let query = supabase
         .from('questions')
@@ -48,11 +56,16 @@ export function useQuestions(subject, options = {}) {
         .eq('standard', 6)
 
       // Filter by paper or subject area
-      if (paperId) {
-        query = query.eq('paper_id', paperId)
-      } else if (SUBJECT_MAP[subject]) {
-        query = query.in('subject_area', SUBJECT_MAP[subject])
-      }
+     if (paperId) {
+  query = query.eq('paper_id', paperId)
+} else if (SUBJECT_MAP[subject] && SUBJECT_MAP[subject].length > 0) {
+  query = query.in('subject_area', SUBJECT_MAP[subject])
+} else {
+  // Subject has no questions yet — return empty
+  setQuestions([])
+  setLoading(false)
+  return
+}
 
       if (difficulty)   query = query.eq('difficulty', difficulty)
       if (bloomsLevel)  query = query.eq('blooms_level', bloomsLevel)
