@@ -291,7 +291,7 @@ export default function Quiz() {
         )}
 
         <div style={{ textAlign: 'center', marginTop: 24 }}>
-          <Link to="/student-dashboard" style={{ color: 'var(--charcoal-lt)', fontSize: '0.85rem' }}>← Exit Quiz</Link>
+          <Link to="/dashboard" style={{ color: 'var(--charcoal-lt)', fontSize: '0.85rem' }}>← Exit Quiz</Link>
         </div>
       </div>
     </div>
