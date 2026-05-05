@@ -2,3 +2,7 @@ node_modules/
 dist/
 .env
 .env
+update_explanations.sql
+generate_explanations.js
+*.backup
+psle_science_questions_enriched_local.json
