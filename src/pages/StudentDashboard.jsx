@@ -102,23 +102,82 @@ function Spark({ attempts }) {
   )
 }
 
+// ── Weak Areas Panel ──────────────────────────────────────────
+function WeakAreasPanel({ weakAreas, loading }) {
+  if (loading) return <div className="spinner" style={{ margin:'16px auto' }}/>
+
+  if (!weakAreas || weakAreas.length === 0) {
+    return (
+      <div style={{ textAlign:'center', padding:'20px 0' }}>
+        <p style={{ fontSize:'1.5rem', marginBottom:6 }}>🎯</p>
+        <p style={{ color:'#AAA', fontSize:'0.82rem' }}>
+          Complete a few quizzes to see your weak areas here.
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
+      {weakAreas.map((area, i) => {
+        const pct = Math.round(area.accuracy_pct ?? 0)
+        const color = gradeColor(pct)
+        const barWidth = `${Math.max(pct, 4)}%`
+        return (
+          <div key={i} style={s.weakRow}>
+            <div style={{ display:'flex', justifyContent:'space-between', marginBottom:5 }}>
+              <div>
+                <span style={s.weakTopic}>{area.subject_area}</span>
+                <span style={s.weakBloom}> · {area.blooms_level}</span>
+              </div>
+              <span style={{ ...s.weakPct, color }}>{pct}%</span>
+            </div>
+            <div style={s.weakBarBg}>
+              <div style={{ ...s.weakBarFill, width: barWidth, background: color }}/>
+            </div>
+            <p style={s.weakAttempts}>{area.total_attempts} attempt{area.total_attempts !== 1 ? 's' : ''}</p>
+          </div>
+        )
+      })}
+      <p style={s.weakHint}>
+        💡 Focus on these topics in your next session to improve your score.
+      </p>
+    </div>
+  )
+}
+
 export default function StudentDashboard() {
   const { session, profile, signOut } = useAuth()
-  const [allResults, setAllResults] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [allResults, setAllResults]   = useState([])
+  const [weakAreas, setWeakAreas]     = useState([])
+  const [loading, setLoading]         = useState(true)
+  const [weakLoading, setWeakLoading] = useState(true)
   const navigate = useNavigate()
 
   useEffect(() => { if (session) loadData() }, [session])
 
   async function loadData() {
     setLoading(true)
-    const { data } = await supabase
+    setWeakLoading(true)
+
+    // Load quiz results (score history)
+    const { data: results } = await supabase
       .from('quiz_results').select('*')
       .eq('user_id', session.user.id)
       .lte('pct', 100)
       .order('created_at', { ascending: true })
-    if (data) setAllResults(data)
+    if (results) setAllResults(results)
     setLoading(false)
+
+    // Load weak areas from view
+    const { data: weak } = await supabase
+      .from('student_weak_areas')
+      .select('subject_area, blooms_level, blooms_level_num, total_attempts, accuracy_pct')
+      .eq('student_id', session.user.id)
+      .order('accuracy_pct', { ascending: true })
+      .limit(5)
+    if (weak) setWeakAreas(weak)
+    setWeakLoading(false)
   }
 
   const displayName = profile?.full_name || session?.user?.email?.split('@')[0] || 'Student'
@@ -173,6 +232,8 @@ export default function StudentDashboard() {
       <div className="content-wrapper" style={{ paddingTop:32, paddingBottom:64 }}>
         <div style={s.grid}>
           <div style={{ minWidth:0 }}>
+
+            {/* Score history chart */}
             <div style={s.chartCard}>
               <div style={s.chartHeader}>
                 <div>
@@ -184,6 +245,21 @@ export default function StudentDashboard() {
               {loading?<div className="spinner" style={{ margin:'24px auto' }}/>:<ScoreChart data={chartData}/>}
             </div>
 
+            {/* Weak areas — full width panel */}
+            <div style={s.weakCard}>
+              <div style={s.weakCardHeader}>
+                <div>
+                  <p style={s.weakCardTitle}>📉 Areas to Improve</p>
+                  <p style={s.weakCardSub}>Topics where your accuracy is below 70%</p>
+                </div>
+                {weakAreas.length > 0 && (
+                  <Link to="/quiz/science" style={s.weakCardBtn}>Practice now →</Link>
+                )}
+              </div>
+              <WeakAreasPanel weakAreas={weakAreas} loading={weakLoading}/>
+            </div>
+
+            {/* Subjects */}
             <div style={s.sectionHeader}>
               <h2 style={s.sectionTitle}>Subjects</h2>
               <Link to="/subjects" className="btn btn-ghost btn-sm">View All →</Link>
@@ -223,6 +299,7 @@ export default function StudentDashboard() {
             )}
           </div>
 
+          {/* Sidebar */}
           <div>
             <div style={s.sideCard}>
               <p style={s.sideCardTitle}>🚀 Quick Revision</p>
@@ -271,6 +348,7 @@ export default function StudentDashboard() {
               <p style={s.tipBadge}>💡 Tip</p>
               <p style={s.tipText}>
                 {totalAttempts===0?'Start with Science — it\'s available now.'
+                 :weakAreas.length>0?`Focus on ${weakAreas[0]?.subject_area} — that's your weakest area right now.`
                  :overallAvg>=70?'Great scores! Consistency is key — keep going.'
                  :'Review explanations after each wrong answer.'}
               </p>
@@ -285,39 +363,55 @@ export default function StudentDashboard() {
 }
 
 const s = {
-  banner:       { background:'var(--forest)', padding:'36px 0 40px' },
-  bannerInner:  { display:'flex', justifyContent:'space-between', alignItems:'center', gap:24, flexWrap:'wrap' },
-  bannerRole:   { color:'var(--sage-lt)', fontSize:'0.78rem', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:8 },
-  bannerTitle:  { fontFamily:'var(--font-display)', fontSize:'clamp(1.6rem,3vw,2.4rem)', color:'var(--ivory)', marginBottom:8 },
-  bannerSub:    { color:'rgba(245,240,232,0.6)', fontSize:'0.9rem' },
-  statRow:      { display:'flex', gap:6, flexWrap:'wrap', flexShrink:0 },
-  statBox:      { background:'rgba(255,255,255,0.07)', border:'1px solid rgba(255,255,255,0.10)', borderRadius:10, padding:'10px 14px', textAlign:'center', minWidth:64 },
-  statNum:      { display:'block', fontFamily:'var(--font-display)', fontSize:'1.45rem', fontWeight:700, color:'var(--gold-lt)', lineHeight:1 },
-  statLabel:    { display:'block', fontSize:'0.64rem', color:'var(--sage-lt)', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.05em', marginTop:4 },
-  grid:         { display:'grid', gridTemplateColumns:'1fr 288px', gap:24, alignItems:'start' },
-  chartCard:    { background:'var(--white)', borderRadius:16, border:'1px solid var(--ivory-dk)', padding:'20px 24px', marginBottom:24, boxShadow:'0 2px 12px rgba(27,61,47,0.07)' },
-  chartHeader:  { display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:16 },
-  chartTitle:   { fontFamily:'var(--font-display)', fontSize:'1.15rem', color:'var(--forest)', marginBottom:2 },
-  chartSub:     { fontSize:'0.75rem', color:'#AAA' },
-  chartBadge:   { fontSize:'0.78rem', fontWeight:700, padding:'4px 10px', borderRadius:100 },
-  sectionHeader:{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 },
-  sectionTitle: { fontFamily:'var(--font-display)', fontSize:'1.2rem', color:'var(--forest)' },
-  subGrid:      { display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))', gap:12 },
-  subCard:      { display:'flex', alignItems:'center', gap:12, background:'var(--white)', border:'1px solid var(--ivory-dk)', borderRadius:14, padding:'14px 16px', textDecoration:'none', color:'inherit', transition:'box-shadow 0.2s' },
-  subDot:       { width:22, height:22, borderRadius:6, display:'inline-flex', alignItems:'center', justifyContent:'center', fontSize:'0.8rem', flexShrink:0 },
-  subName:      { fontWeight:600, fontSize:'0.88rem', color:'var(--charcoal)' },
-  subBadge:     { fontSize:'0.7rem', fontWeight:700, background:'#fef3cd', color:'#856404', padding:'3px 9px', borderRadius:100, flexShrink:0, alignSelf:'flex-start' },
-  sideCard:     { background:'var(--white)', border:'1px solid var(--ivory-dk)', borderRadius:14, padding:'20px', marginBottom:14, boxShadow:'0 1px 6px rgba(27,61,47,0.07)' },
-  sideCardTitle:{ fontFamily:'var(--font-display)', fontSize:'1.05rem', color:'var(--forest)', marginBottom:5 },
-  sideCardDesc: { color:'var(--charcoal-lt)', fontSize:'0.83rem', lineHeight:1.55 },
-  circleGrid:   { display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:8, marginTop:12 },
-  actRow:       { display:'flex', justifyContent:'space-between', padding:'9px 0', borderBottom:'1px solid var(--ivory-dk)' },
-  actSubject:   { fontSize:'0.83rem', fontWeight:600, color:'var(--charcoal)' },
-  actDate:      { fontSize:'0.7rem', color:'#AAA' },
-  actScore:     { fontSize:'0.88rem', fontWeight:700 },
-  actGrade:     { fontSize:'0.7rem', fontWeight:600 },
-  tipCard:      { background:'var(--forest)', borderRadius:14, padding:'18px', marginBottom:12 },
-  tipBadge:     { fontSize:'0.75rem', fontWeight:700, color:'var(--gold)', marginBottom:6, letterSpacing:'0.04em' },
-  tipText:      { fontSize:'0.83rem', color:'rgba(245,240,232,0.75)', lineHeight:1.6 },
-  signOut:      { width:'100%', background:'var(--white)', border:'1.5px solid var(--ivory-dk)', color:'var(--charcoal-lt)', borderRadius:10, fontFamily:'var(--font-body)', fontSize:'0.88rem', fontWeight:600, cursor:'pointer', padding:'11px' },
+  banner:         { background:'var(--forest)', padding:'36px 0 40px' },
+  bannerInner:    { display:'flex', justifyContent:'space-between', alignItems:'center', gap:24, flexWrap:'wrap' },
+  bannerRole:     { color:'var(--sage-lt)', fontSize:'0.78rem', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:8 },
+  bannerTitle:    { fontFamily:'var(--font-display)', fontSize:'clamp(1.6rem,3vw,2.4rem)', color:'var(--ivory)', marginBottom:8 },
+  bannerSub:      { color:'rgba(245,240,232,0.6)', fontSize:'0.9rem' },
+  statRow:        { display:'flex', gap:6, flexWrap:'wrap', flexShrink:0 },
+  statBox:        { background:'rgba(255,255,255,0.07)', border:'1px solid rgba(255,255,255,0.10)', borderRadius:10, padding:'10px 14px', textAlign:'center', minWidth:64 },
+  statNum:        { display:'block', fontFamily:'var(--font-display)', fontSize:'1.45rem', fontWeight:700, color:'var(--gold-lt)', lineHeight:1 },
+  statLabel:      { display:'block', fontSize:'0.64rem', color:'var(--sage-lt)', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.05em', marginTop:4 },
+  grid:           { display:'grid', gridTemplateColumns:'1fr 288px', gap:24, alignItems:'start' },
+  chartCard:      { background:'var(--white)', borderRadius:16, border:'1px solid var(--ivory-dk)', padding:'20px 24px', marginBottom:24, boxShadow:'0 2px 12px rgba(27,61,47,0.07)' },
+  chartHeader:    { display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:16 },
+  chartTitle:     { fontFamily:'var(--font-display)', fontSize:'1.15rem', color:'var(--forest)', marginBottom:2 },
+  chartSub:       { fontSize:'0.75rem', color:'#AAA' },
+  chartBadge:     { fontSize:'0.78rem', fontWeight:700, padding:'4px 10px', borderRadius:100 },
+
+  // Weak areas
+  weakCard:       { background:'var(--white)', borderRadius:16, border:'1.5px solid #FFD9D9', padding:'20px 24px', marginBottom:24, boxShadow:'0 2px 12px rgba(192,57,43,0.07)' },
+  weakCardHeader: { display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:16 },
+  weakCardTitle:  { fontFamily:'var(--font-display)', fontSize:'1.15rem', color:'#C0392B', marginBottom:2 },
+  weakCardSub:    { fontSize:'0.75rem', color:'#AAA' },
+  weakCardBtn:    { fontSize:'0.8rem', fontWeight:700, color:'var(--forest)', textDecoration:'none', background:'var(--ivory)', padding:'6px 12px', borderRadius:20 },
+  weakRow:        { background:'#FFF8F8', borderRadius:10, padding:'10px 14px', border:'1px solid #FFE8E8' },
+  weakTopic:      { fontSize:'0.83rem', fontWeight:700, color:'var(--charcoal)' },
+  weakBloom:      { fontSize:'0.75rem', color:'#AAA' },
+  weakPct:        { fontSize:'0.88rem', fontWeight:700 },
+  weakBarBg:      { height:5, background:'#F0F0F0', borderRadius:10, overflow:'hidden', marginBottom:4 },
+  weakBarFill:    { height:'100%', borderRadius:10, transition:'width 0.6s ease' },
+  weakAttempts:   { fontSize:'0.7rem', color:'#BBB' },
+  weakHint:       { fontSize:'0.78rem', color:'#AAA', fontStyle:'italic', marginTop:4 },
+
+  sectionHeader:  { display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 },
+  sectionTitle:   { fontFamily:'var(--font-display)', fontSize:'1.2rem', color:'var(--forest)' },
+  subGrid:        { display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))', gap:12 },
+  subCard:        { display:'flex', alignItems:'center', gap:12, background:'var(--white)', border:'1px solid var(--ivory-dk)', borderRadius:14, padding:'14px 16px', textDecoration:'none', color:'inherit', transition:'box-shadow 0.2s' },
+  subDot:         { width:22, height:22, borderRadius:6, display:'inline-flex', alignItems:'center', justifyContent:'center', fontSize:'0.8rem', flexShrink:0 },
+  subName:        { fontWeight:600, fontSize:'0.88rem', color:'var(--charcoal)' },
+  subBadge:       { fontSize:'0.7rem', fontWeight:700, background:'#fef3cd', color:'#856404', padding:'3px 9px', borderRadius:100, flexShrink:0, alignSelf:'flex-start' },
+  sideCard:       { background:'var(--white)', border:'1px solid var(--ivory-dk)', borderRadius:14, padding:'20px', marginBottom:14, boxShadow:'0 1px 6px rgba(27,61,47,0.07)' },
+  sideCardTitle:  { fontFamily:'var(--font-display)', fontSize:'1.05rem', color:'var(--forest)', marginBottom:5 },
+  sideCardDesc:   { color:'var(--charcoal-lt)', fontSize:'0.83rem', lineHeight:1.55 },
+  circleGrid:     { display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:8, marginTop:12 },
+  actRow:         { display:'flex', justifyContent:'space-between', padding:'9px 0', borderBottom:'1px solid var(--ivory-dk)' },
+  actSubject:     { fontSize:'0.83rem', fontWeight:600, color:'var(--charcoal)' },
+  actDate:        { fontSize:'0.7rem', color:'#AAA' },
+  actScore:       { fontSize:'0.88rem', fontWeight:700 },
+  actGrade:       { fontSize:'0.7rem', fontWeight:600 },
+  tipCard:        { background:'var(--forest)', borderRadius:14, padding:'18px', marginBottom:12 },
+  tipBadge:       { fontSize:'0.75rem', fontWeight:700, color:'var(--gold)', marginBottom:6, letterSpacing:'0.04em' },
+  tipText:        { fontSize:'0.83rem', color:'rgba(245,240,232,0.75)', lineHeight:1.6 },
+  signOut:        { width:'100%', background:'var(--white)', border:'1.5px solid var(--ivory-dk)', color:'var(--charcoal-lt)', borderRadius:10, fontFamily:'var(--font-body)', fontSize:'0.88rem', fontWeight:600, cursor:'pointer', padding:'11px' },
 }
