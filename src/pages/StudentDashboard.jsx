@@ -34,7 +34,7 @@ function ScoreChart({ data }) {
       <div style={{ textAlign:'center', padding:'32px 0' }}>
         <p style={{ fontSize:'2rem', marginBottom:8 }}>📊</p>
         <p style={{ color:'#AAA', fontSize:'0.85rem', marginBottom:8 }}>No attempts yet</p>
-        <Link to="/quiz/science" style={{ color:'var(--forest-lt)', fontWeight:600, fontSize:'0.85rem' }}>Take your first quiz →</Link>
+        <Link to="/subjects" style={{ color:'var(--forest-lt)', fontWeight:600, fontSize:'0.85rem' }}>Take your first quiz →</Link>
       </div>
     )
   }
@@ -253,7 +253,7 @@ export default function StudentDashboard() {
                   <p style={s.weakCardSub}>Topics where your accuracy is below 70%</p>
                 </div>
                 {weakAreas.length > 0 && (
-                  <Link to="/quiz/science" style={s.weakCardBtn}>Practice now →</Link>
+                  <Link to="/subjects" style={s.weakCardBtn}>Practice now →</Link>
                 )}
               </div>
               <WeakAreasPanel weakAreas={weakAreas} loading={weakLoading}/>
@@ -304,7 +304,7 @@ export default function StudentDashboard() {
             <div style={s.sideCard}>
               <p style={s.sideCardTitle}>🚀 Quick Revision</p>
               <p style={s.sideCardDesc}>Jump straight into a Science session.</p>
-              <Link to="/quiz/science" className="btn btn-primary btn-full" style={{ marginTop:14, fontSize:'0.9rem' }}>
+              <Link to="/subjects" className="btn btn-primary btn-full" style={{ marginTop:14, fontSize:'0.9rem' }}>
                 {bestScores['science']?'Retry Science →':'Start Science →'}
               </Link>
             </div>
