@@ -99,7 +99,7 @@ export default function ParentDashboard() {
   const [linkErr, setLinkErr]             = useState('')
   const [linking, setLinking]             = useState(false)
   const [loading, setLoading]             = useState(true)
-  const [nudgeSent, setNudgeSent]         = useState(false)
+  const [childWeakAreas, setChildWeakAreas] = useState([])
   const navigate = useNavigate()
 
   useEffect(() => { if (session) loadChildren() }, [session])
@@ -133,6 +133,13 @@ export default function ParentDashboard() {
     if (prof)    setChildProfile(prof)
     if (results) setChildResults(results)
     setNudgeSent(false)
+    const { data: weak } = await supabase
+  .from('student_weak_areas')
+  .select('subject_area, blooms_level, total_attempts, accuracy_pct')
+  .eq('student_id', childId)
+  .order('accuracy_pct', { ascending: true })
+  .limit(5)
+setChildWeakAreas(weak || [])
   }
 
   async function linkChild(e) {
@@ -340,6 +347,34 @@ export default function ParentDashboard() {
                     )
                   })}
                 </div>
+
+{childWeakAreas.length > 0 && (
+  <div style={{ ...s.chartCard, marginTop:20, borderColor:'#FFD9D9' }}>
+    <p style={{ ...s.chartTitle, color:'#C0392B', marginBottom:4 }}>📉 Areas to Improve</p>
+    <p style={{ ...s.chartSub, marginBottom:14 }}>Topics where {childProfile.full_name?.split(' ')[0]} scores below 70%</p>
+    <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
+      {childWeakAreas.map((area, i) => {
+        const pct = Math.round(area.accuracy_pct ?? 0)
+        const color = gradeColor(pct)
+        return (
+          <div key={i} style={{ background:'#FFF8F8', borderRadius:10, padding:'10px 14px', border:'1px solid #FFE8E8' }}>
+            <div style={{ display:'flex', justifyContent:'space-between', marginBottom:5 }}>
+              <div>
+                <span style={{ fontSize:'0.83rem', fontWeight:700, color:'var(--charcoal)' }}>{area.subject_area}</span>
+                <span style={{ fontSize:'0.75rem', color:'#AAA' }}> · {area.blooms_level}</span>
+              </div>
+              <span style={{ fontSize:'0.88rem', fontWeight:700, color }}>{pct}%</span>
+            </div>
+            <div style={{ height:5, background:'#F0F0F0', borderRadius:10, overflow:'hidden' }}>
+              <div style={{ width:`${Math.max(pct,4)}%`, height:'100%', background:color, borderRadius:10 }}/>
+            </div>
+            <p style={{ fontSize:'0.7rem', color:'#BBB', marginTop:3 }}>{area.total_attempts} attempt{area.total_attempts !== 1 ? 's' : ''}</p>
+          </div>
+        )
+      })}
+    </div>
+  </div>
+)}
 
                 {/* Recent activity */}
                 <div style={{ ...s.chartCard, marginTop:20 }}>

@@ -174,7 +174,7 @@ export default function Quiz() {
       }
 
       navigate('/results', {
-        state: { score, total, pct, subject: config.name, answers: finalAnswers, isGuest }
+        state: { score, total, pct, subject: config.name, answers: finalAnswers, questions: builtQuestions, isGuest }
       })
       return
     }

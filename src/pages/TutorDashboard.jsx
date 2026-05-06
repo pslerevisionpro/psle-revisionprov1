@@ -126,6 +126,7 @@ export default function TutorDashboard() {
   const [linking, setLinking]                 = useState(false)
   const [loading, setLoading]                 = useState(true)
   const [activeTab, setActiveTab]             = useState('overview')
+  const [studentWeakAreas, setStudentWeakAreas] = useState([])
   const navigate = useNavigate()
 
   useEffect(() => { if (session) loadStudents() }, [session])
@@ -172,6 +173,15 @@ export default function TutorDashboard() {
       .eq('child_id', studentId)
       .single()
     setParentInfo(parentLink?.profiles || null)
+
+const { data: weak } = await supabase
+  .from('student_weak_areas')
+  .select('subject_area, blooms_level, total_attempts, accuracy_pct')
+  .eq('student_id', studentId)
+  .order('accuracy_pct', { ascending: true })
+  .limit(5)
+setStudentWeakAreas(weak || [])
+
   }
 
   async function linkStudent(e) {
@@ -526,6 +536,35 @@ export default function TutorDashboard() {
                 {/* Session Plan tab */}
                 {activeTab==='session' && (
                   <div>
+
+{studentWeakAreas.length > 0 && (
+  <div style={{ ...s.chartCard, marginBottom:14, borderColor:'#FFD9D9' }}>
+    <p style={{ ...s.chartTitle, color:'#C0392B', marginBottom:4 }}>📉 Weak Areas — DB Analysis</p>
+    <p style={{ ...s.chartSub, marginBottom:14 }}>Based on individual question attempts</p>
+    <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+      {studentWeakAreas.map((area, i) => {
+        const pct = Math.round(area.accuracy_pct ?? 0)
+        const color = gradeColor(pct)
+        return (
+          <div key={i} style={{ background:'#FFF8F8', borderRadius:10, padding:'10px 14px', border:'1px solid #FFE8E8' }}>
+            <div style={{ display:'flex', justifyContent:'space-between', marginBottom:4 }}>
+              <div>
+                <span style={{ fontSize:'0.82rem', fontWeight:700, color:'var(--charcoal)' }}>{area.subject_area}</span>
+                <span style={{ fontSize:'0.72rem', color:'#AAA' }}> · {area.blooms_level}</span>
+              </div>
+              <span style={{ fontSize:'0.85rem', fontWeight:700, color }}>{pct}%</span>
+            </div>
+            <div style={{ height:4, background:'#F0F0F0', borderRadius:10, overflow:'hidden' }}>
+              <div style={{ width:`${Math.max(pct,4)}%`, height:'100%', background:color, borderRadius:10 }}/>
+            </div>
+            <p style={{ fontSize:'0.68rem', color:'#BBB', marginTop:3 }}>{area.total_attempts} attempts</p>
+          </div>
+        )
+      })}
+    </div>
+  </div>
+)}
+
                     <div style={s.sessionCard}>
                       <div style={s.sessionHeader}>
                         <div>
