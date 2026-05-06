@@ -40,14 +40,15 @@ export default function Quiz() {
   const { subject } = useParams()
   const [searchParams] = useSearchParams()
   const isGuest = searchParams.get('guest') === 'true' || sessionStorage.getItem('rp_guest_mode') === 'true'
+const limitParam = parseInt(searchParams.get('limit')) || 60
 
   const config = QUIZ_CONFIGS[subject]
   const { session } = useAuth()
   const navigate = useNavigate()
 
   // ── Fetch questions from Supabase ──────────────────────────
-  const { questions: rawQuestions, loading, error } = useQuestions(subject, {
-    limit: isGuest ? GUEST_LIMIT : 60,
+const { questions: rawQuestions, loading, error } = useQuestions(subject, {
+  limit: isGuest ? GUEST_LIMIT : limitParam,
   })
 
   // Build shuffled question list once rawQuestions arrive
