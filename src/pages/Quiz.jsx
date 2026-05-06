@@ -175,7 +175,7 @@ const { questions: rawQuestions, loading, error } = useQuestions(subject, {
       }
 
       navigate('/results', {
-        state: { score, total, pct, subject: config.name, answers: finalAnswers, questions: builtQuestions, isGuest }
+        state: { score, total, pct, subject: config.name, answers: finalAnswers, questions, isGuest }
       })
       return
     }
