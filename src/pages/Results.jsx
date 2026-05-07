@@ -225,12 +225,9 @@ export default function Results() {
           <>
             {/* Action buttons */}
             <div style={styles.actions}>
-              <Link to={`/quiz/${subject?.toLowerCase()}`} className="btn btn-primary" style={{ padding:'13px 28px' }}>
-                🔄 Retry Quiz
-              </Link>
-              <Link to="/subjects" className="btn btn-outline" style={{ padding:'13px 28px' }}>
-                📚 Choose Subject
-              </Link>
+            <Link to="/subjects" className="btn btn-primary" style={{ padding:'13px 28px' }}>
+  📚 Choose Next Subject →
+</Link>
               <Link to="/dashboard" className="btn btn-ghost" style={{ padding:'13px 28px' }}>
                 🏠 Dashboard
               </Link>
