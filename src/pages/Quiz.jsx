@@ -154,25 +154,28 @@ const { questions: rawQuestions, loading, error } = useQuestions(subject, {
       const total = questions.length
       const pct   = Math.round((score / total) * 100)
 
-      if (session && !isGuest) {
-        await supabase.from('quiz_results').insert({
-          user_id: session.user.id,
-          subject: config.name,
-          score,
-          total,
-          pct,
-        })
+if (session && !isGuest) {
+  try {
+    await supabase.from('quiz_results').insert({
+      user_id: session.user.id,
+      subject: config.name,
+      score,
+      total,
+      pct,
+    })
 
-        // Record individual attempts for weak-area tracking
-        const attemptRows = finalAnswers.map(a => ({
-          student_id:      session.user.id,
-          question_id:     a.questionId,
-          paper_id:        questions.find(q => q.id === a.questionId)?.paper_id ?? null,
-          selected_answer: String.fromCharCode(65 + a.selected),
-          is_correct:      a.correct,
-        }))
-        await supabase.from('student_attempts').insert(attemptRows)
-      }
+    const attemptRows = finalAnswers.map(a => ({
+      student_id:      session.user.id,
+      question_id:     a.questionId,
+      paper_id:        questions.find(q => q.id === a.questionId)?.paper_id ?? null,
+      selected_answer: String.fromCharCode(65 + a.selected),
+      is_correct:      a.correct,
+    }))
+    await supabase.from('student_attempts').insert(attemptRows)
+  } catch (err) {
+    console.error('Error saving results:', err)
+  }
+}
 
       navigate('/results', {
         state: { score, total, pct, subject: config.name, answers: finalAnswers, questions, isGuest }
