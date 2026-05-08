@@ -165,13 +165,14 @@ if (session && !isGuest) {
     })
 
     const attemptRows = finalAnswers.map(a => ({
-      student_id:      session.user.id,
-      question_id:     a.questionId,
-      paper_id:        questions.find(q => q.id === a.questionId)?.paper_id ?? null,
-      selected_answer: String.fromCharCode(65 + a.selected),
-      is_correct:      a.correct,
-    }))
-    await supabase.from('student_attempts').insert(attemptRows)
+  student_id:      session.user.id,
+  question_id:     a.questionId,
+  paper_id:        questions.find(q => q.id === a.questionId)?.paper_id ?? null,
+  selected_answer: String.fromCharCode(65 + a.selected),
+  is_correct:      a.correct,
+}))
+console.log('Inserting attempts:', JSON.stringify(attemptRows[0]))
+await supabase.from('student_attempts').insert(attemptRows)
   } catch (err) {
   console.error('Error saving results:', err.message, JSON.stringify(err))
 }
