@@ -173,8 +173,8 @@ if (session && !isGuest) {
     }))
     await supabase.from('student_attempts').insert(attemptRows)
   } catch (err) {
-    console.error('Error saving results:', err)
-  }
+  console.error('Error saving results:', err.message, JSON.stringify(err))
+}
 }
 
       navigate('/results', {
