@@ -10,6 +10,7 @@ import Dashboard from './pages/Dashboard'
 import SubjectList from './pages/SubjectList'
 import Quiz from './pages/Quiz'
 import Results from './pages/Results'
+import ResetPassword from './pages/ResetPassword'
 
 function GuestOrAuth({ children }) {
   const isGuest = typeof window !== 'undefined' &&
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="/quiz/:subject" element={<GuestOrAuth><Quiz /></GuestOrAuth>} />
         <Route path="/results" element={<GuestOrAuth><Results /></GuestOrAuth>} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/subjects" element={<ProtectedRoute><SubjectList /></ProtectedRoute>} />
         <Route path="*" element={
           <div style={{ minHeight:'100vh', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', fontFamily:'var(--font-body)', gap:16 }}>
