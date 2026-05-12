@@ -115,7 +115,7 @@ export default function StudentAuth() {
           onChange={e => set('password', e.target.value)}
           required
           minLength={minLength}
-          style={{ paddingRight: 44 }}
+          style={{ paddingRight: 44 }} autoComplete="off"
         />
         <button
           type="button"

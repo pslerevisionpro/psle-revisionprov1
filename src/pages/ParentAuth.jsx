@@ -87,7 +87,7 @@ export default function ParentAuth() {
           onChange={e => set('password', e.target.value)}
           required
           minLength={minLength}
-          style={{ paddingRight: 44 }}
+          style={{ paddingRight: 44 }} autoComplete="off"
         />
         <button type="button" onClick={() => setShowPassword(v => !v)} style={s.eyeBtn} tabIndex={-1}>
           {showPassword ? '🙈' : '👁️'}
