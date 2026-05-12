@@ -99,6 +99,7 @@ export default function ParentDashboard() {
   const [linkErr, setLinkErr]             = useState('')
   const [linking, setLinking]             = useState(false)
   const [loading, setLoading]             = useState(true)
+  const [nudgeSent, setNudgeSent]         = useState(false)
   const [childWeakAreas, setChildWeakAreas] = useState([])
   const navigate = useNavigate()
 
