@@ -164,15 +164,18 @@ if (session && !isGuest) {
       pct,
     })
 
-    const attemptRows = finalAnswers.map(a => ({
-  student_id:      session.user.id,
-  question_id:     a.questionId,
-  paper_id:        questions.find(q => q.id === a.questionId)?.paper_id ?? null,
-  selected_answer: String.fromCharCode(65 + a.selected),
-  is_correct:      a.correct,
-}))
-console.log('Inserting attempts:', JSON.stringify(attemptRows[0]))
-await supabase.from('student_attempts').insert(attemptRows)
+    for (const a of finalAnswers) {
+  const q = questions.find(q => q.id === a.questionId)
+  if (!q || a.selected === null || a.selected === undefined) continue
+  const { error: attemptError } = await supabase.from('student_attempts').insert({
+    student_id:      session.user.id,
+    question_id:     a.questionId,
+    paper_id:        q.paper_id ?? null,
+    selected_answer: String.fromCharCode(65 + a.selected),
+    is_correct:      a.correct,
+  })
+  if (attemptError) console.error('Attempt insert error:', attemptError.message)
+}
   } catch (err) {
   console.error('Error saving results:', err.message, JSON.stringify(err))
 }
