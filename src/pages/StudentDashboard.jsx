@@ -34,7 +34,7 @@ function ScoreChart({ data }) {
       <div style={{ textAlign:'center', padding:'32px 0' }}>
         <p style={{ fontSize:'2rem', marginBottom:8 }}>📊</p>
         <p style={{ color:'#AAA', fontSize:'0.85rem', marginBottom:8 }}>No attempts yet</p>
-        <Link to="/subjects" style={{ color:'var(--forest-lt)', fontWeight:600, fontSize:'0.85rem' }}>Take your first quiz →</Link>
+        <Link to="/quiz/science" style={{ color:'var(--forest-lt)', fontWeight:600, fontSize:'0.85rem' }}>Take your first quiz →</Link>
       </div>
     )
   }
@@ -189,7 +189,7 @@ export default function StudentDashboard() {
     attemptsBySubject[key].push({ ...r, pct:clamp(r.pct) })
   })
   const attempted=Object.values(bestScores)
-  const overallAvg=allResults.length>0?Math.round(allResults.reduce((a,b)=>a+clamp(b.pct),0)/allResults.length):0
+  const overallAvg=attempted.length>0?Math.round(attempted.reduce((a,b)=>a+b,0)/attempted.length):0
   const totalAttempts=allResults.length
   const bestScore=attempted.length>0?Math.max(...attempted):0
   const recentScores=[...allResults].reverse().slice(0,5)
@@ -253,7 +253,7 @@ export default function StudentDashboard() {
                   <p style={s.weakCardSub}>Topics where your accuracy is below 70%</p>
                 </div>
                 {weakAreas.length > 0 && (
-                  <Link to="/subjects" style={s.weakCardBtn}>Practice now →</Link>
+                  <Link to="/quiz/science" style={s.weakCardBtn}>Practice now →</Link>
                 )}
               </div>
               <WeakAreasPanel weakAreas={weakAreas} loading={weakLoading}/>
@@ -262,7 +262,7 @@ export default function StudentDashboard() {
             {/* Subjects */}
             <div style={s.sectionHeader}>
               <h2 style={s.sectionTitle}>Subjects</h2>
-              <Link to="/subjects" className="btn btn-primary btn-sm">Choose Subject →</Link>
+              <Link to="/subjects" className="btn btn-ghost btn-sm">View All →</Link>
             </div>
             {loading?<div className="spinner"/>:(
               <div style={s.subGrid}>
@@ -271,7 +271,7 @@ export default function StudentDashboard() {
                   const best=bestScores[key]??bestScores[sub.key]??null
                   const attempts=attemptsBySubject[key]||attemptsBySubject[sub.key]||[]
                   return (
-                    <Link key={sub.key} to="/subjects" style={s.subCard}>
+                    <Link key={sub.key} to={sub.available?`/quiz/${sub.key}`:'/subjects'} style={s.subCard}>
                       <Ring pct={best??0} size={60}/>
                       <div style={{ flex:1, minWidth:0 }}>
                         <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:3 }}>
@@ -302,11 +302,11 @@ export default function StudentDashboard() {
           {/* Sidebar */}
           <div>
             <div style={s.sideCard}>
-              <p style={s.sideCardTitle}>🚀 Start Practising</p>
-<p style={s.sideCardDesc}>Choose a subject and pick how many questions — 10, 20, or full 60.</p>
-<Link to="/subjects" className="btn btn-primary btn-full" style={{ marginTop:14, fontSize:'0.9rem' }}>
-  Choose Subject & Mode →
-</Link>
+              <p style={s.sideCardTitle}>🚀 Quick Revision</p>
+              <p style={s.sideCardDesc}>Jump straight into a Science session.</p>
+              <Link to="/quiz/science" className="btn btn-primary btn-full" style={{ marginTop:14, fontSize:'0.9rem' }}>
+                {bestScores['science']?'Retry Science →':'Start Science →'}
+              </Link>
             </div>
 
             <div style={{ ...s.sideCard, padding:'18px 16px' }}>
