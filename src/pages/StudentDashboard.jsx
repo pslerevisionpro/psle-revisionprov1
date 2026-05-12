@@ -189,7 +189,7 @@ export default function StudentDashboard() {
     attemptsBySubject[key].push({ ...r, pct:clamp(r.pct) })
   })
   const attempted=Object.values(bestScores)
-  const overallAvg=attempted.length>0?Math.round(attempted.reduce((a,b)=>a+b,0)/attempted.length):0
+  const overallAvg=allResults.length>0?Math.round(allResults.reduce((a,b)=>a+clamp(b.pct),0)/allResults.length):0
   const totalAttempts=allResults.length
   const bestScore=attempted.length>0?Math.max(...attempted):0
   const recentScores=[...allResults].reverse().slice(0,5)
