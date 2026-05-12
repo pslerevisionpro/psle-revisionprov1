@@ -8,7 +8,7 @@ function PasswordField({ placeholder, minLength, showPassword, onToggle, value, 
   return (
     <div style={{ position: 'relative' }}>
       <input
-        type={showPassword ? 'text' : 'password'} autoComplete="current-password"
+        type={showPassword ? 'text' : 'password'}
         placeholder={placeholder || 'Your password'}
         value={value}
         onChange={onChange}
