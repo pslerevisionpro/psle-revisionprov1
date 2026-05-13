@@ -358,10 +358,10 @@ export default function StudentDashboard() {
           {/* Sidebar */}
           <div>
             <div style={s.sideCard}>
-              <p style={s.sideCardTitle}>🚀 Quick Revision</p>
-              <p style={s.sideCardDesc}>Jump straight into a Science session.</p>
+              <p style={s.sideCardTitle}>🚀 Start Practising</p>
+              <p style={s.sideCardDesc}>Choose a subject and pick how many questions — 10, 20, or full 60.</p>
               <Link to="/subjects" className="btn btn-primary btn-full" style={{ marginTop:14, fontSize:'0.9rem' }}>
-                {bestScores['science']?'Retry Science →':'Start Science →'}
+                'Choose Subject & Mode →'
               </Link>
             </div>
 
