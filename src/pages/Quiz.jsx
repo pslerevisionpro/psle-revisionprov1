@@ -84,7 +84,7 @@ const { questions: rawQuestions, loading, error } = useQuestions(subject, {
   }
 
   // ── Loading state ──────────────────────────────────────────
-  if (loading || questions.length === 0) {
+  if (loading || (rawQuestions.length > 0 && questions.length === 0)) {
     return (
       <div className="page-container">
         <Navbar />
