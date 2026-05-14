@@ -6,7 +6,7 @@ const SUBJECT_CONFIG = {
     name: 'Science', standard: 6, filterBy: 'subject_area', optionsFormat: 'array',
     subjectAreas: ['Ecology','Conservation','Environment & Pollution','Solutions & Mixtures','Hard & Soft Water','Weather & Climate','Earth & Space','States of Matter','Elements & Compounds','Energy Concepts','Heat Transfer','Light','Sound','Acids & Alkalis','Forces & Friction','Levers & Machines','Electric Circuits','Lightning & Static','Energy Sources','Human Reproduction','Science & Technology','Science Careers','Science Skills','General Science'],
   },
-  maths:       { name: 'Mathematics',    standard: 7, filterBy: 'subject', optionsFormat: 'columns' },
+  maths:       { name: 'Mathematics',    standard: 6, filterBy: 'subject', optionsFormat: 'columns' },
   english:     { name: 'English',        standard: 7, filterBy: 'subject', optionsFormat: 'columns' },
   setswana:    { name: 'Setswana',       standard: 7, filterBy: 'subject', optionsFormat: 'columns' },
   agriculture: { name: 'Agriculture',    standard: 7, filterBy: 'subject', optionsFormat: 'columns' },
