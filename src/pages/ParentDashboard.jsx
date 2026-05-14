@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Navbar from '../components/Navbar'
+import { SubjectHistory } from '../components/SubjectHistory'
 
 const SUBJECTS = [
   { key: 'science',     name: 'Science',       emoji: '🔬' },
@@ -377,6 +378,18 @@ setChildWeakAreas(weak || [])
   </div>
 )}
 
+                {/* Subject Score History */}
+                {[...new Set(childResults.map(r => r.subject).filter(Boolean))].length > 0 && (
+                  <div style={{ marginBottom:20 }}>
+                    <div style={s.sectionHeader}>
+                      <h2 style={s.sectionTitle}>Subject Score History</h2>
+                      <span style={{ fontSize:'0.78rem', color:'#AAA' }}>Last 10 · 7-day · 4-week</span>
+                    </div>
+                    {[...new Set(childResults.map(r => r.subject).filter(Boolean))].map(subject => (
+                      <SubjectHistory key={subject} subjectName={subject} results={childResults.filter(r => r.subject === subject)} />
+                    ))}
+                  </div>
+                )}
                 {/* Recent activity */}
                 <div style={{ ...s.chartCard, marginTop:20 }}>
                   <p style={s.chartTitle}>Recent Quiz Activity</p>

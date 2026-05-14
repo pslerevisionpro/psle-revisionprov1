@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Navbar from '../components/Navbar'
+import { SubjectHistory } from '../components/SubjectHistory'
 
 const SUBJECTS = [
   { key: 'science',     name: 'Science',       emoji: '🔬', color: '#1B3D2F', available: true },
@@ -149,7 +150,8 @@ function WeakAreasPanel({ weakAreas, loading }) {
 // PASTE THIS ENTIRE BLOCK into StudentDashboard.jsx
 // Place it BEFORE the line: export default function StudentDashboard()
 
-function SubjectHistory({ subjectName, results }) {
+// SubjectHistory moved to src/components/SubjectHistory.jsx
+// function SubjectHistory({ subjectName, results }) {
   if (!results || results.length === 0) return null
   const MS_DAY = 86400000
   const now = Date.now()
