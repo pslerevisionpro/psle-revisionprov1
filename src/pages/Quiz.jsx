@@ -54,10 +54,10 @@ const { questions: rawQuestions, loading, error } = useQuestions(subject, {
   // Build shuffled question list once rawQuestions arrive
   const [questions, setQuestions] = useState([])
   useEffect(() => {
-    if (rawQuestions.length > 0) {
+    if (rawQuestions.length > 0) { console.log("Quiz useEffect firing, rawQ[0]:", JSON.stringify(rawQuestions[0]))
       const pool = shuffle([...rawQuestions])
       const picked = isGuest ? pool.slice(0, GUEST_LIMIT) : pool
-      setQuestions(picked.map(shuffleOptions))
+      try { setQuestions(picked.map(shuffleOptions)) } catch(e) { console.error("shuffleOptions error:", e, picked[0]) }
     }
   }, [rawQuestions])
 
