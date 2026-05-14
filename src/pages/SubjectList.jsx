@@ -1,53 +1,62 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { createClient } from '@supabase/supabase-js'
 import Navbar from '../components/Navbar'
 
+const SUPA_URL = 'https://zkttvqrojyoeinhyycgd.supabase.co'
+const SUPA_KEY = 'sb_publishable_WJFVZDHhNZw3ypnEfZAx4A_gLS241no'
+const sb = createClient(SUPA_URL, SUPA_KEY)
+
+const SUBJECT_NAME_TO_KEY = {
+  'Mathematics':    'maths',
+  'Science':        'science',
+  'English':        'english',
+  'Setswana':       'setswana',
+  'Social Studies': 'social',
+  'Agriculture':    'agriculture',
+  'RME':            'rme',
+}
+
 const SUBJECTS = [
-  { key: 'science',     name: 'Science',       emoji: '🔬', description: 'Biology, chemistry, physics, and earth science — all the PSLE topics.', topics: ['Living Things', 'Matter & Materials', 'Forces & Energy', 'Earth & Space'], available: true,  color: '#1B3D2F' },
-  { key: 'english',     name: 'English',        emoji: '✏️', description: 'Reading comprehension, grammar, vocabulary, and writing skills.',           topics: ['Comprehension', 'Grammar', 'Vocabulary', 'Writing'],                  available: false, color: '#2D5A45' },
-  { key: 'maths',       name: 'Mathematics',    emoji: '🔢', description: 'Numbers, fractions, geometry, and problem solving.',                        topics: ['Number Work', 'Fractions', 'Geometry', 'Data Handling'],             available: false, color: '#3F7A5E' },
-  { key: 'setswana',    name: 'Setswana',       emoji: '🗣️', description: 'Reading, writing, and oral comprehension in Setswana.',                    topics: ['Go Bala', 'Go Kwala', 'Puo ya Molomo', 'Dipadi'],                   available: false, color: '#1B3D2F' },
-  { key: 'social',      name: 'Social Studies', emoji: '🌍', description: 'Botswana geography, history, civics, and the wider world.',                 topics: ['History', 'Geography', 'Civics', 'Economics'],                       available: false, color: '#2D5A45' },
-  { key: 'agriculture', name: 'Agriculture',    emoji: '🌱', description: 'Farming, crops, soils, livestock and agricultural practices in Botswana.',  topics: ['Soils & Crops', 'Livestock', 'Farm Management', 'Irrigation'],      available: false, color: '#5C7A3E' },
-  { key: 'rme',         name: 'RME',            emoji: '📖', description: 'Religious and moral education — ethics, values, and faiths.',               topics: ['Values', 'World Religions', 'Moral Reasoning', 'Community'],        available: false, color: '#3F7A5E' },
+  { key: 'science',     name: 'Science',       emoji: '🔬', description: 'Biology, chemistry, physics, and earth science — all the PSLE topics.', topics: ['Living Things', 'Matter & Materials', 'Forces & Energy', 'Earth & Space'], color: '#1B3D2F' },
+  { key: 'english',     name: 'English',        emoji: '✏️', description: 'Reading comprehension, grammar, vocabulary, and writing skills.',           topics: ['Comprehension', 'Grammar', 'Vocabulary', 'Writing'],                  color: '#2D5A45' },
+  { key: 'maths',       name: 'Mathematics',    emoji: '🔢', description: 'Numbers, fractions, geometry, and problem solving.',                        topics: ['Number Work', 'Fractions', 'Geometry', 'Data Handling'],             color: '#3F7A5E' },
+  { key: 'setswana',    name: 'Setswana',       emoji: '🗣️', description: 'Reading, writing, and oral comprehension in Setswana.',                    topics: ['Go Bala', 'Go Kwala', 'Puo ya Molomo', 'Dipadi'],                   color: '#1B3D2F' },
+  { key: 'social',      name: 'Social Studies', emoji: '🌍', description: 'Botswana geography, history, civics, and the wider world.',                 topics: ['History', 'Geography', 'Civics', 'Economics'],                       color: '#2D5A45' },
+  { key: 'agriculture', name: 'Agriculture',    emoji: '🌱', description: 'Farming, crops, soils, livestock and agricultural practices in Botswana.',  topics: ['Soils & Crops', 'Livestock', 'Farm Management', 'Irrigation'],      color: '#5C7A3E' },
+  { key: 'rme',         name: 'RME',            emoji: '📖', description: 'Religious and moral education — ethics, values, and faiths.',               topics: ['Values', 'World Religions', 'Moral Reasoning', 'Community'],        color: '#3F7A5E' },
 ]
 
 const MODES = [
-  {
-    limit: 10,
-    label: 'Quick Practice',
-    sublabel: '~5 minutes',
-    emoji: '⚡',
-    desc: 'A short burst of 10 random questions. Great for a daily warm-up.',
-    color: '#27AE60',
-    recommended: true,
-  },
-  {
-    limit: 20,
-    label: 'Standard Practice',
-    sublabel: '~10 minutes',
-    emoji: '📚',
-    desc: '20 questions covering a broader range of topics for deeper revision.',
-    color: '#2980B9',
-    recommended: false,
-  },
-  {
-    limit: 60,
-    label: 'Full Paper',
-    sublabel: '~30 minutes',
-    emoji: '🎓',
-    desc: 'All 60 questions — full exam length. Use this for serious revision or timed simulation.',
-    color: '#8E44AD',
-    recommended: false,
-  },
+  { limit: 10,  label: 'Quick Practice',    sublabel: '~5 minutes',  emoji: '⚡', desc: 'A short burst of 10 random questions. Great for a daily warm-up.',                             color: '#27AE60', recommended: true  },
+  { limit: 20,  label: 'Standard Practice', sublabel: '~10 minutes', emoji: '📚', desc: '20 questions covering a broader range of topics for deeper revision.',                         color: '#2980B9', recommended: false },
+  { limit: 60,  label: 'Full Paper',        sublabel: '~30 minutes', emoji: '🎓', desc: 'All 60 questions — full exam length. Use this for serious revision or timed simulation.',      color: '#8E44AD', recommended: false },
 ]
 
 export default function SubjectList() {
   const [selected, setSelected] = useState(null)
+  const [availableKeys, setAvailableKeys] = useState(new Set())
+  const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
 
+  useEffect(() => {
+    async function checkAvailable() {
+      try {
+        const { data, error } = await sb.from('questions').select('subject').limit(1000)
+        if (error) throw error
+        const keys = new Set((data || []).map(r => SUBJECT_NAME_TO_KEY[r.subject]).filter(Boolean))
+        setAvailableKeys(keys)
+      } catch (err) {
+        console.error('Could not check available subjects:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    checkAvailable()
+  }, [])
+
   function handleSubjectClick(sub) {
-    if (!sub.available) return
+    if (!availableKeys.has(sub.key)) return
     setSelected(selected === sub.key ? null : sub.key)
   }
 
@@ -58,109 +67,75 @@ export default function SubjectList() {
   return (
     <div className="page-container">
       <Navbar />
-
       <div style={styles.header}>
         <div className="content-wrapper">
-          <p style={styles.breadcrumb}>
-            <Link to="/dashboard" style={{ color: 'var(--sage-lt)' }}>Dashboard</Link> / Subjects
-          </p>
+          <p style={styles.breadcrumb}><Link to="/dashboard" style={{ color: 'var(--sage-lt)' }}>Dashboard</Link> / Subjects</p>
           <h1 style={styles.title}>Choose a Subject</h1>
           <p style={styles.subtitle}>Select a subject, then choose how many questions to practice.</p>
         </div>
       </div>
-
       <div className="content-wrapper" style={{ paddingTop: 40, paddingBottom: 60 }}>
-        <div style={styles.grid}>
-          {SUBJECTS.map(sub => {
-            const isSelected = selected === sub.key
-            return (
-              <div key={sub.key} style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-
-                {/* Subject card */}
-                <div
-                  style={{
-                    ...styles.card,
-                    ...(isSelected ? styles.cardSelected : {}),
-                    ...(sub.available ? { cursor: 'pointer' } : {}),
-                  }}
-                  onClick={() => handleSubjectClick(sub)}
-                  className="card"
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
-                    <div style={{ ...styles.iconBox, background: sub.color }}>{sub.emoji}</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      {sub.available
-                        ? <span className="badge badge-green">Available</span>
-                        : <span className="badge badge-gold">Coming Soon</span>}
-                      {isSelected && <span style={styles.expandedBadge}>▲ Select mode</span>}
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: 60, color: 'var(--charcoal-lt)' }}>⏳ Loading subjects…</div>
+        ) : (
+          <div style={styles.grid}>
+            {SUBJECTS.map(sub => {
+              const isAvailable = availableKeys.has(sub.key)
+              const isSelected  = selected === sub.key
+              return (
+                <div key={sub.key} style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+                  <div
+                    style={{ ...styles.card, ...(isSelected ? styles.cardSelected : {}), ...(isAvailable ? { cursor: 'pointer' } : {}) }}
+                    onClick={() => handleSubjectClick(sub)}
+                    className="card"
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
+                      <div style={{ ...styles.iconBox, background: sub.color }}>{sub.emoji}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        {isAvailable ? <span className="badge badge-green">Available</span> : <span className="badge badge-gold">Coming Soon</span>}
+                        {isSelected && <span style={styles.expandedBadge}>▲ Select mode</span>}
+                      </div>
                     </div>
+                    <h3 style={styles.subTitle}>{sub.name}</h3>
+                    <p style={styles.subDesc}>{sub.description}</p>
+                    <div style={styles.topics}>{sub.topics.map(t => <span key={t} style={styles.topic}>{t}</span>)}</div>
+                    {isAvailable ? (
+                      <div style={{ ...styles.startBtn, background: isSelected ? sub.color : 'var(--forest)' }} onClick={e => { e.stopPropagation(); handleSubjectClick(sub) }}>
+                        {isSelected ? 'Choose how many questions ↓' : 'Start Practice →'}
+                      </div>
+                    ) : (
+                      <button className="btn btn-outline btn-full" disabled style={{ marginTop: 20, opacity: 0.5 }}>Coming Soon</button>
+                    )}
                   </div>
-
-                  <h3 style={styles.subTitle}>{sub.name}</h3>
-                  <p style={styles.subDesc}>{sub.description}</p>
-
-                  <div style={styles.topics}>
-                    {sub.topics.map(t => (
-                      <span key={t} style={styles.topic}>{t}</span>
-                    ))}
-                  </div>
-
-                  {sub.available ? (
-                    <div
-                      style={{ ...styles.startBtn, background: isSelected ? sub.color : 'var(--forest)' }}
-                      onClick={e => { e.stopPropagation(); handleSubjectClick(sub) }}
-                    >
-                      {isSelected ? 'Choose how many questions ↓' : 'Start Practice →'}
+                  {isSelected && (
+                    <div style={styles.modePicker}>
+                      <p style={styles.modePickerTitle}>How many questions?</p>
+                      <div style={styles.modeGrid}>
+                        {MODES.map(mode => (
+                          <button key={mode.limit} style={styles.modeCard} onClick={() => startQuiz(sub.key, mode.limit)}>
+                            <div style={styles.modeTop}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                <span style={{ fontSize: '1.3rem' }}>{mode.emoji}</span>
+                                <div style={{ textAlign: 'left' }}>
+                                  <p style={styles.modeLabel}>{mode.label}</p>
+                                  <p style={styles.modeSublabel}>{mode.sublabel}</p>
+                                </div>
+                              </div>
+                              {mode.recommended && <span style={styles.recommendedBadge}>Recommended</span>}
+                            </div>
+                            <p style={styles.modeDesc}>{mode.desc}</p>
+                            <div style={{ ...styles.modeBtn, background: mode.color }}>{mode.limit} Questions →</div>
+                          </button>
+                        ))}
+                      </div>
+                      <button style={styles.cancelBtn} onClick={() => setSelected(null)}>✕ Cancel</button>
                     </div>
-                  ) : (
-                    <button className="btn btn-outline btn-full" disabled style={{ marginTop: 20, opacity: 0.5 }}>
-                      Coming Soon
-                    </button>
                   )}
                 </div>
-
-                {/* Mode picker — expands below selected card */}
-                {isSelected && (
-                  <div style={styles.modePicker}>
-                    <p style={styles.modePickerTitle}>How many questions?</p>
-                    <div style={styles.modeGrid}>
-                      {MODES.map(mode => (
-                        <button
-                          key={mode.limit}
-                          style={styles.modeCard}
-                          onClick={() => startQuiz(sub.key, mode.limit)}
-                        >
-                          <div style={styles.modeTop}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                              <span style={{ fontSize: '1.3rem' }}>{mode.emoji}</span>
-                              <div style={{ textAlign: 'left' }}>
-                                <p style={styles.modeLabel}>{mode.label}</p>
-                                <p style={styles.modeSublabel}>{mode.sublabel}</p>
-                              </div>
-                            </div>
-                            {mode.recommended && (
-                              <span style={styles.recommendedBadge}>Recommended</span>
-                            )}
-                          </div>
-                          <p style={styles.modeDesc}>{mode.desc}</p>
-                          <div style={{ ...styles.modeBtn, background: mode.color }}>
-                            {mode.limit} Questions →
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                    <button
-                      style={styles.cancelBtn}
-                      onClick={() => setSelected(null)}
-                    >
-                      ✕ Cancel
-                    </button>
-                  </div>
-                )}
-              </div>
-            )
-          })}
-        </div>
+              )
+            })}
+          </div>
+        )}
       </div>
     </div>
   )
@@ -181,8 +156,6 @@ const styles = {
   topics:           { display: 'flex', flexWrap: 'wrap', gap: 6 },
   topic:            { background: 'var(--ivory)', color: 'var(--charcoal-lt)', fontSize: '0.75rem', padding: '4px 10px', borderRadius: 100, border: '1px solid var(--ivory-dk)', fontWeight: 500 },
   startBtn:         { marginTop: 20, background: 'var(--forest)', color: 'var(--gold-lt)', borderRadius: 8, padding: '12px 20px', textAlign: 'center', fontWeight: 700, fontSize: '0.92rem', fontFamily: 'var(--font-body)', transition: 'background 0.2s' },
-
-  // Mode picker
   modePicker:       { background: 'var(--ivory)', border: '2px solid var(--forest)', borderTop: 'none', borderRadius: '0 0 var(--radius-lg) var(--radius-lg)', padding: '20px', marginTop: -2 },
   modePickerTitle:  { fontFamily: 'var(--font-display)', fontSize: '1rem', color: 'var(--forest)', marginBottom: 14, textAlign: 'center' },
   modeGrid:         { display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 14 },
