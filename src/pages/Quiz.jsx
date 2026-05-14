@@ -56,7 +56,7 @@ const { questions: rawQuestions, loading, error } = useQuestions(subject, {
   useEffect(() => {
       const pool = shuffle([...rawQuestions])
       const picked = isGuest ? pool.slice(0, GUEST_LIMIT) : pool
-      try { setQuestions(picked.map(shuffleOptions)) } catch(e) { console.error("shuffleOptions error:", e, picked[0]) }
+      setQuestions(picked.map(shuffleOptions))
     }
   }, [rawQuestions])
 
