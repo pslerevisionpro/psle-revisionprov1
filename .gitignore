@@ -6,3 +6,9 @@ update_explanations.sql
 generate_explanations.js
 *.backup
 psle_science_questions_enriched_local.json
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
