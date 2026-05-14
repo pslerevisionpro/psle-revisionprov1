@@ -10,6 +10,8 @@ import Dashboard from './pages/Dashboard'
 import SubjectList from './pages/SubjectList'
 import Quiz from './pages/Quiz'
 import Results from './pages/Results'
+import MockExam from './pages/MockExam'
+import MockResults from './pages/MockResults'
 import ResetPassword from './pages/ResetPassword'
 
 function GuestOrAuth({ children }) {
@@ -29,6 +31,8 @@ export default function App() {
         <Route path="/parent-auth" element={<ParentAuth />} />
         <Route path="/tutor-auth" element={<TutorAuth />} />
         <Route path="/quiz/:subject" element={<GuestOrAuth><Quiz /></GuestOrAuth>} />
+        <Route path="/mock/:subject" element={<ProtectedRoute><MockExam /></ProtectedRoute>} />
+        <Route path="/mock-results" element={<ProtectedRoute><MockResults /></ProtectedRoute>} />
         <Route path="/results" element={<GuestOrAuth><Results /></GuestOrAuth>} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/reset-password" element={<ResetPassword />} />
