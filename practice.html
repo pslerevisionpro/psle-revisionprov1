@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practice Session — PSLE RevisionPro</title>
+<link rel="stylesheet" href="design-system.css">
+<style>
+body { background: #F0F2F5; }
+.practice-shell { min-height: 100vh; display: flex; flex-direction: column; }
+.practice-header { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+.practice-header .logo { font-family: var(--font-head); font-weight: 900; color: var(--teal); font-size: 1.1rem; }
+.prac-meta { display: flex; align-items: center; gap: 16px; }
+.timer-display { font-family: var(--font-mono); font-weight: 700; font-size: 1.1rem; color: var(--navy); background: var(--cream); padding: 6px 14px; border-radius: 8px; border: 1px solid var(--border); }
+.timer-display.warning { color: var(--red); background: rgba(231,76,60,.08); border-color: rgba(231,76,60,.2); animation: pulse 1s ease infinite; }
+
+/* Setup screen */
+#setup-screen { display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 64px); padding: 32px; }
+.setup-card { background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); padding: 40px; max-width: 520px; width: 100%; }
+.setup-card h2 { margin-bottom: 8px; }
+.setup-card p  { color: var(--muted); margin-bottom: 28px; }
+.subj-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+.subj-opt { padding: 14px 10px; border: 2px solid var(--border); border-radius: var(--radius-md); text-align: center; cursor: pointer; transition: all .2s; }
+.subj-opt:hover { border-color: var(--teal); }
+.subj-opt.selected { border-color: var(--teal); background: rgba(13,115,119,.07); }
+.subj-opt .s-emoji { font-size: 1.4rem; display: block; }
+.subj-opt .s-name  { font-size: 0.72rem; font-weight: 700; font-family: var(--font-head); margin-top: 4px; display: block; }
+.mode-opts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+.mode-opt { padding: 14px; border: 2px solid var(--border); border-radius: var(--radius-md); cursor: pointer; transition: all .2s; }
+.mode-opt:hover  { border-color: var(--teal); }
+.mode-opt.selected { border-color: var(--teal); background: rgba(13,115,119,.07); }
+.mode-opt h5 { font-size: 0.88rem; font-family: var(--font-head); margin-bottom: 3px; }
+.mode-opt p  { font-size: 0.75rem; color: var(--muted); }
+.qty-btns { display: flex; gap: 8px; margin-bottom: 28px; }
+.qty-btn { flex: 1; padding: 10px; border: 2px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; font-family: var(--font-head); font-weight: 700; font-size: 0.9rem; text-align: center; transition: all .2s; background: #fff; }
+.qty-btn:hover, .qty-btn.selected { border-color: var(--teal); background: rgba(13,115,119,.07); color: var(--teal); }
+
+/* Question screen */
+#question-screen { display: none; flex: 1; padding: 32px 24px; max-width: 720px; margin: 0 auto; width: 100%; }
+.q-progress-bar { background: var(--border); border-radius: 50px; height: 8px; margin-bottom: 28px; overflow: hidden; }
+.q-progress-fill { height: 100%; border-radius: 50px; background: var(--teal); transition: width .4s ease; }
+.q-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.q-counter { font-family: var(--font-head); font-weight: 700; font-size: 0.9rem; color: var(--muted); }
+.q-topic { font-size: 0.8rem; font-weight: 600; color: var(--teal); background: rgba(13,115,119,.1); padding: 4px 12px; border-radius: 50px; }
+.q-difficulty { font-size: 0.75rem; }
+.question-card { background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 36px; margin-bottom: 16px; }
+.question-text { font-size: 1.15rem; font-weight: 600; color: var(--navy); line-height: 1.6; margin-bottom: 28px; font-family: var(--font-head); }
+.options-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.option-btn {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px; border-radius: var(--radius-md);
+  border: 2px solid var(--border); background: var(--cream);
+  cursor: pointer; transition: all .2s; text-align: left; width: 100%;
+  font-size: 0.95rem; color: var(--charcoal); font-weight: 500;
+}
+.option-btn:hover:not(:disabled) { border-color: var(--teal); background: rgba(13,115,119,.05); transform: translateX(4px); }
+.option-letter { width: 30px; height: 30px; border-radius: 8px; background: var(--border); color: var(--charcoal); font-weight: 700; font-family: var(--font-head); font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .2s; }
+.option-btn.correct { border-color: var(--green); background: rgba(46,204,113,.08); animation: none; }
+.option-btn.correct .option-letter { background: var(--green); color: #fff; }
+.option-btn.wrong   { border-color: var(--red); background: rgba(231,76,60,.06); animation: shake .4s ease; }
+.option-btn.wrong .option-letter { background: var(--red); color: #fff; }
+.option-btn.dim { opacity: .45; pointer-events: none; }
+.option-btn:disabled { cursor: default; }
+
+/* Explanation panel */
+.explanation-panel { background: var(--navy); color: #fff; border-radius: var(--radius-lg); padding: 24px 28px; margin-bottom: 20px; display: none; }
+.explanation-panel.show { display: block; animation: fadeUp .3s ease; }
+.exp-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.exp-badge-correct { background: rgba(46,204,113,.2); color: #5ddc8e; padding: 4px 12px; border-radius: 50px; font-size: 0.78rem; font-weight: 700; font-family: var(--font-head); }
+.exp-badge-wrong   { background: rgba(231,76,60,.2); color: #f08080; padding: 4px 12px; border-radius: 50px; font-size: 0.78rem; font-weight: 700; font-family: var(--font-head); }
+.exp-text { font-size: 0.9rem; line-height: 1.7; color: rgba(255,255,255,.85); margin-bottom: 10px; }
+.exp-tip  { background: rgba(244,166,20,.15); border-left: 3px solid var(--gold); padding: 10px 14px; border-radius: 0 8px 8px 0; font-size: 0.82rem; color: rgba(255,255,255,.75); }
+.exp-tip strong { color: var(--gold); }
+.q-actions { display: flex; justify-content: space-between; align-items: center; }
+
+/* Results screen */
+#results-screen { display: none; align-items: center; justify-content: center; min-height: calc(100vh - 64px); padding: 32px; }
+.results-card { background: #fff; border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); padding: 48px 40px; max-width: 560px; width: 100%; text-align: center; }
+.score-ring { position: relative; width: 160px; height: 160px; margin: 0 auto 28px; }
+.score-ring svg { transform: rotate(-90deg); }
+.score-ring .score-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.score-ring .score-num { font-family: var(--font-head); font-weight: 900; font-size: 2.4rem; color: var(--navy); line-height: 1; }
+.score-ring .score-sub { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+.result-summary { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 24px 0; }
+.rs-item { background: var(--cream); border-radius: var(--radius-md); padding: 14px 10px; }
+.rs-item .rs-val { font-family: var(--font-head); font-weight: 900; font-size: 1.4rem; color: var(--navy); }
+.rs-item .rs-lbl { font-size: 0.72rem; color: var(--muted); font-weight: 600; margin-top: 2px; }
+.topic-breakdown { text-align: left; background: var(--cream); border-radius: var(--radius-md); padding: 16px 18px; margin-bottom: 24px; }
+.topic-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; }
+.topic-row:not(:last-child) { border-bottom: 1px solid var(--border); }
+.topic-name { flex: 1; font-size: 0.85rem; font-weight: 600; }
+.topic-score { font-size: 0.82rem; font-family: var(--font-mono); font-weight: 700; width: 40px; text-align: right; }
+.topic-bar  { flex: 2; height: 6px; background: var(--border); border-radius: 50px; overflow: hidden; }
+.topic-fill { height: 100%; border-radius: 50px; }
+
+#confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 9999; overflow: hidden; }
+.confetti-piece { position: absolute; width: 10px; height: 10px; border-radius: 2px; top: -20px; animation: confetti-fall linear forwards; }
+</style>
+</head>
+<body>
+<div class="practice-shell">
+  <header class="practice-header">
+    <div style="display:flex;align-items:center;gap:12px">
+      <a href="student-dashboard.html" style="color:var(--muted);font-size:1.2rem;text-decoration:none">←</a>
+      <span class="logo">📝 Practice Mode</span>
+    </div>
+    <div class="prac-meta">
+      <span class="badge badge-teal" id="subj-badge">Mathematics</span>
+      <div class="timer-display" id="timer-el" style="display:none">⏱ 20:00</div>
+      <a href="student-dashboard.html" class="btn btn-outline btn-sm">Exit</a>
+    </div>
+  </header>
+
+  <!-- Setup Screen -->
+  <div id="setup-screen">
+    <div class="setup-card">
+      <h2>Start a Practice Session</h2>
+      <p>Choose your subject, mode, and number of questions.</p>
+
+      <div style="margin-bottom:12px"><label style="font-size:0.82rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Select Subject</label></div>
+      <div class="subj-selector">
+        <div class="subj-opt selected" onclick="selectSubj(this,'Mathematics')"><span class="s-emoji">➕</span><span class="s-name">Mathematics</span></div>
+        <div class="subj-opt" onclick="selectSubj(this,'English')"><span class="s-emoji">📖</span><span class="s-name">English</span></div>
+        <div class="subj-opt" onclick="selectSubj(this,'Science')"><span class="s-emoji">🔬</span><span class="s-name">Science</span></div>
+        <div class="subj-opt" onclick="selectSubj(this,'Agriculture')"><span class="s-emoji">🌾</span><span class="s-name">Agriculture</span></div>
+        <div class="subj-opt" onclick="selectSubj(this,'Social Studies')"><span class="s-emoji">🗺️</span><span class="s-name">Soc. Studies</span></div>
+        <div class="subj-opt" onclick="selectSubj(this,'Setswana')"><span class="s-emoji">🗣️</span><span class="s-name">Setswana</span></div>
+      </div>
+
+      <div style="margin-bottom:12px"><label style="font-size:0.82rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Practice Mode</label></div>
+      <div class="mode-opts">
+        <div class="mode-opt selected" onclick="selectMode(this,'untimed')"><h5>🕐 Untimed</h5><p>Work at your own pace</p></div>
+        <div class="mode-opt" onclick="selectMode(this,'timed')"><h5>⏱️ Timed</h5><p>20-minute challenge</p></div>
+        <div class="mode-opt" onclick="selectMode(this,'drill')"><h5>⚡ Quick Drill</h5><p>10 questions fast</p></div>
+      </div>
+
+      <div style="margin-bottom:12px"><label style="font-size:0.82rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Number of Questions</label></div>
+      <div class="qty-btns">
+        <div class="qty-btn selected" onclick="selectQty(this,10)">10</div>
+        <div class="qty-btn" onclick="selectQty(this,20)">20</div>
+        <div class="qty-btn" onclick="selectQty(this,30)">30</div>
+        <div class="qty-btn" onclick="selectQty(this,50)">50</div>
+      </div>
+
+      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="startSession()">🚀 Start Practice Session</button>
+    </div>
+  </div>
+
+  <!-- Question Screen -->
+  <div id="question-screen" style="flex:1">
+    <div class="q-progress-bar"><div class="q-progress-fill" id="q-progress" style="width:0%"></div></div>
+    <div class="q-meta">
+      <span class="q-counter" id="q-counter">Question 1 of 10</span>
+      <span class="q-topic" id="q-topic">Fractions</span>
+      <span class="q-difficulty" id="q-diff"></span>
+    </div>
+
+    <div class="question-card">
+      <div class="question-text" id="q-text">Loading question...</div>
+      <ul class="options-list" id="options-list"></ul>
+    </div>
+
+    <div class="explanation-panel" id="exp-panel">
+      <div class="exp-header">
+        <span id="exp-badge"></span>
+        <span id="exp-stars" style="color:var(--gold);font-size:0.85rem"></span>
+      </div>
+      <div class="exp-text" id="exp-text"></div>
+      <div class="exp-tip"><strong>💡 Examiner's Tip:</strong> <span id="exp-tip"></span></div>
+    </div>
+
+    <div class="q-actions">
+      <button class="btn btn-outline btn-sm" onclick="bookmarkQ()">🔖 Bookmark</button>
+      <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()" disabled>Next Question →</button>
+    </div>
+  </div>
+
+  <!-- Results Screen -->
+  <div id="results-screen">
+    <div id="confetti-container"></div>
+    <div class="results-card">
+      <div style="font-size:2rem;margin-bottom:8px" id="result-emoji">🎉</div>
+      <h2 id="result-title">Excellent Work!</h2>
+      <p style="color:var(--muted);margin-bottom:24px" id="result-subtitle">Mathematics · Untimed Practice</p>
+      <div class="score-ring">
+        <svg width="160" height="160" viewBox="0 0 160 160">
+          <circle cx="80" cy="80" r="66" fill="none" stroke="#E5E7EB" stroke-width="12"/>
+          <circle cx="80" cy="80" r="66" fill="none" stroke="var(--teal)" stroke-width="12" stroke-linecap="round" id="score-arc" stroke-dasharray="414.7" stroke-dashoffset="414.7"/>
+        </svg>
+        <div class="score-text">
+          <div class="score-num" id="score-num">0%</div>
+          <div class="score-sub" id="score-sub">0 / 0</div>
+        </div>
+      </div>
+      <div class="result-summary">
+        <div class="rs-item"><div class="rs-val" id="r-correct">0</div><div class="rs-lbl">Correct</div></div>
+        <div class="rs-item"><div class="rs-val" id="r-wrong">0</div><div class="rs-lbl">Incorrect</div></div>
+        <div class="rs-item"><div class="rs-val" id="r-time">0:00</div><div class="rs-lbl">Time Taken</div></div>
+      </div>
+
+      <div class="topic-breakdown">
+        <div style="font-weight:700;font-family:var(--font-head);font-size:0.85rem;margin-bottom:10px">📊 Topic Breakdown</div>
+        <div class="topic-row"><span class="topic-name">Fractions</span><div class="topic-bar"><div class="topic-fill" style="width:90%;background:var(--green)"></div></div><span class="topic-score" style="color:var(--green)">9/10</span></div>
+        <div class="topic-row"><span class="topic-name">Measurement</span><div class="topic-bar"><div class="topic-fill" style="width:70%;background:var(--gold)"></div></div><span class="topic-score" style="color:var(--gold)">7/10</span></div>
+        <div class="topic-row"><span class="topic-name">Geometry</span><div class="topic-bar"><div class="topic-fill" style="width:50%;background:var(--red)"></div></div><span class="topic-score" style="color:var(--red)">5/10</span></div>
+      </div>
+
+      <div id="result-message" style="background:rgba(13,115,119,.07);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:24px;font-size:0.88rem;color:var(--charcoal);line-height:1.6"></div>
+
+      <div style="display:flex;gap:12px">
+        <button class="btn btn-outline" style="flex:1;justify-content:center" onclick="restartPractice()">🔄 Practise Again</button>
+        <a href="student-dashboard.html" class="btn btn-primary" style="flex:1;justify-content:center">🏠 Dashboard</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  { text: "A rectangle has a perimeter of 36cm. If its length is 10cm, what is its width?", options: ["A) 16cm", "B) 8cm", "C) 26cm", "D) 18cm"], correct: 1, topic: "Measurement", diff: "Core", explanation: "Perimeter = 2 × (length + width). So 36 = 2 × (10 + w), giving 18 = 10 + w, therefore w = 8cm.", tip: "Remember: perimeter means the total distance AROUND the shape. Always divide by 2 first.", stars: 2 },
+  { text: "What is ³⁄₄ + ¹⁄₂?", options: ["A) ⁵⁄₄ (1¼)", "B) ⁴⁄₆ (⅔)", "C) ¹⁄₄", "D) ²⁄₃"], correct: 0, topic: "Fractions", diff: "Foundation", explanation: "Convert ½ to a quarter: ½ = ²⁄₄. Now ³⁄₄ + ²⁄₄ = ⁵⁄₄ = 1¼.", tip: "Always find the Lowest Common Denominator before adding fractions. Never add the denominators together!", stars: 1 },
+  { text: "If a train travels 240km in 3 hours, what is its average speed?", options: ["A) 60 km/h", "B) 80 km/h", "C) 720 km/h", "D) 40 km/h"], correct: 1, topic: "Measurement", diff: "Core", explanation: "Speed = Distance ÷ Time = 240 ÷ 3 = 80 km/h. This is the average speed formula.", tip: "Speed, Distance, Time — the triangle! Cover the one you want to find.", stars: 2 },
+  { text: "What percentage of 80 is 20?", options: ["A) 20%", "B) 4%", "C) 25%", "D) 16%"], correct: 2, topic: "Percentages", diff: "Core", explanation: "Percentage = (part ÷ whole) × 100 = (20 ÷ 80) × 100 = 0.25 × 100 = 25%.", tip: "Always divide the PART by the WHOLE (not the other way around) before multiplying by 100.", stars: 2 },
+  { text: "What is the area of a triangle with base 12cm and height 8cm?", options: ["A) 96cm²", "B) 20cm²", "C) 48cm²", "D) 40cm²"], correct: 2, topic: "Geometry", diff: "Core", explanation: "Area of triangle = ½ × base × height = ½ × 12 × 8 = 48cm².", tip: "NEVER forget the ½ in the triangle formula — students lose marks on this every year!", stars: 2 },
+  { text: "Simplify: 5x + 3y − 2x + y", options: ["A) 3x + 4y", "B) 7x + 4y", "C) 3x + 2y", "D) 7x − 4y"], correct: 0, topic: "Algebra", diff: "Stretch", explanation: "Group like terms: (5x − 2x) + (3y + y) = 3x + 4y. Only combine terms with the same variable.", tip: "Circle the like terms before collecting them — it prevents mixing up x and y terms.", stars: 3 },
+  { text: "A bag has 5 red, 3 blue and 2 green balls. What is the probability of picking a blue ball?", options: ["A) ³⁄₅", "B) ³⁄₁₀", "C) ¹⁄₃", "D) ²⁄₅"], correct: 1, topic: "Data Handling", diff: "Stretch", explanation: "Total balls = 5 + 3 + 2 = 10. P(blue) = 3 out of 10 = ³⁄₁₀.", tip: "Always find the TOTAL number of outcomes first. That's your denominator.", stars: 3 },
+  { text: "What is the value of 2³ × 3²?", options: ["A) 36", "B) 72", "C) 18", "D) 48"], correct: 1, topic: "Number Operations", diff: "Core", explanation: "2³ = 2×2×2 = 8. 3² = 3×3 = 9. So 8 × 9 = 72.", tip: "Calculate each power separately first, then multiply the results together.", stars: 2 },
+  { text: "Which of these is NOT a factor of 36?", options: ["A) 9", "B) 4", "C) 8", "D) 12"], correct: 2, topic: "Number Operations", diff: "Foundation", explanation: "36 ÷ 8 = 4.5 — not a whole number, so 8 is NOT a factor of 36. Factors of 36: 1,2,3,4,6,9,12,18,36.", tip: "A factor divides the number EXACTLY with no remainder. Test each option by dividing.", stars: 1 },
+  { text: "If 40% of a number is 60, what is the full number?", options: ["A) 24", "B) 100", "C) 150", "D) 84"], correct: 2, topic: "Percentages", diff: "Stretch", explanation: "40% = 60, so 1% = 60 ÷ 40 = 1.5. Therefore 100% = 1.5 × 100 = 150.", tip: "The unitary method: find 1% first, then multiply by 100. This works every time.", stars: 3 }
+];
+
+let currentQ = 0, score = 0, answered = 0, startTime, timerInterval, totalQ = 10, mode = 'untimed', selectedSubj = 'Mathematics', wrongCount = 0;
+
+function selectSubj(el, subj) { document.querySelectorAll('.subj-opt').forEach(e => e.classList.remove('selected')); el.classList.add('selected'); selectedSubj = subj; document.getElementById('subj-badge').textContent = subj; }
+function selectMode(el, m) { document.querySelectorAll('.mode-opt').forEach(e => e.classList.remove('selected')); el.classList.add('selected'); mode = m; }
+function selectQty(el, q) { document.querySelectorAll('.qty-btn').forEach(e => e.classList.remove('selected')); el.classList.add('selected'); totalQ = q; }
+
+function startSession() {
+  document.getElementById('setup-screen').style.display = 'none';
+  const qs = document.getElementById('question-screen');
+  qs.style.display = 'flex'; qs.style.flexDirection = 'column';
+  startTime = Date.now();
+  if (mode === 'timed') startTimer(1200);
+  showQuestion();
+}
+
+function startTimer(secs) {
+  const el = document.getElementById('timer-el');
+  el.style.display = 'block';
+  let remaining = secs;
+  timerInterval = setInterval(() => {
+    remaining--;
+    const m = Math.floor(remaining/60), s = remaining%60;
+    el.textContent = `⏱ ${m}:${s.toString().padStart(2,'0')}`;
+    if (remaining <= 60) el.classList.add('warning');
+    if (remaining <= 0) { clearInterval(timerInterval); showResults(); }
+  }, 1000);
+}
+
+function showQuestion() {
+  const q = QUESTIONS[currentQ % QUESTIONS.length];
+  const prog = ((currentQ) / totalQ) * 100;
+  document.getElementById('q-progress').style.width = prog + '%';
+  document.getElementById('q-counter').textContent = `Question ${currentQ+1} of ${totalQ}`;
+  document.getElementById('q-topic').textContent = q.topic;
+  document.getElementById('q-diff').textContent = q.diff === 'Foundation' ? '🟢 Foundation' : q.diff === 'Core' ? '🟡 Core' : '🔴 Stretch';
+  document.getElementById('q-text').textContent = q.text;
+  const list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<button class="option-btn" onclick="selectAnswer(${i}, ${q.correct}, this)"><span class="option-letter">${'ABCD'[i]}</span>${opt.substring(3)}</button>`;
+    list.appendChild(li);
+  });
+  document.getElementById('exp-panel').classList.remove('show');
+  document.getElementById('next-btn').disabled = true;
+}
+
+function selectAnswer(selected, correct, btn) {
+  const buttons = document.querySelectorAll('.option-btn');
+  buttons.forEach(b => { b.disabled = true; });
+  const q = QUESTIONS[currentQ % QUESTIONS.length];
+  if (selected === correct) {
+    btn.classList.add('correct'); score++;
+    document.getElementById('exp-badge').innerHTML = `<span class="exp-badge-correct">✓ Correct! +${q.stars}⭐</span>`;
+    document.getElementById('exp-stars').textContent = '⭐'.repeat(q.stars);
+  } else {
+    btn.classList.add('wrong');
+    buttons[correct].classList.add('correct');
+    wrongCount++;
+    document.getElementById('exp-badge').innerHTML = `<span class="exp-badge-wrong">✗ Not quite — see the explanation</span>`;
+    document.getElementById('exp-stars').textContent = '';
+  }
+  buttons.forEach((b, i) => { if (i !== selected && i !== correct) b.classList.add('dim'); });
+  document.getElementById('exp-text').textContent = q.explanation;
+  document.getElementById('exp-tip').textContent = q.tip;
+  document.getElementById('exp-panel').classList.add('show');
+  document.getElementById('next-btn').disabled = false;
+  answered++;
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= totalQ) { clearInterval(timerInterval); showResults(); return; }
+  showQuestion();
+}
+
+function showResults() {
+  document.getElementById('question-screen').style.display = 'none';
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'flex';
+  const pct = Math.round((score / totalQ) * 100);
+  document.getElementById('score-num').textContent = pct + '%';
+  document.getElementById('score-sub').textContent = `${score} / ${totalQ}`;
+  document.getElementById('r-correct').textContent = score;
+  document.getElementById('r-wrong').textContent = totalQ - score;
+  const elapsed = Math.round((Date.now() - startTime) / 1000);
+  document.getElementById('r-time').textContent = `${Math.floor(elapsed/60)}:${(elapsed%60).toString().padStart(2,'0')}`;
+  const arc = document.getElementById('score-arc');
+  const circumference = 414.7;
+  setTimeout(() => { arc.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)'; arc.style.strokeDashoffset = circumference - (circumference * pct / 100); arc.style.stroke = pct >= 75 ? 'var(--green)' : pct >= 50 ? 'var(--gold)' : 'var(--red)'; }, 100);
+  document.getElementById('result-emoji').textContent = pct >= 80 ? '🌟' : pct >= 60 ? '👏' : '💪';
+  document.getElementById('result-title').textContent = pct >= 80 ? 'Excellent Work!' : pct >= 60 ? 'Well Done!' : 'Keep Practising!';
+  document.getElementById('result-subtitle').textContent = `${selectedSubj} · ${mode.charAt(0).toUpperCase()+mode.slice(1)} Practice`;
+  document.getElementById('result-message').textContent = pct >= 80 ? `Outstanding! You got ${score} out of ${totalQ} correct — you're clearly understanding this material well. Keep this up and you'll be in great shape for the PSLE!` : pct >= 60 ? `Good effort! ${score}/${totalQ} correct — you're making solid progress. Revisit the questions you got wrong and focus on those topics next time.` : `You got ${score}/${totalQ} today — but remember, every wrong answer is a learning opportunity. Review the explanations carefully and try again. You're improving!`;
+  if (pct >= 80) spawnConfetti();
+}
+
+function spawnConfetti() {
+  const container = document.getElementById('confetti-container');
+  const colors = ['#0D7377','#F4A614','#2ECC71','#6C63FF','#EF4444'];
+  for (let i = 0; i < 60; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.cssText = `left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*.8}s;transform:rotate(${Math.random()*360}deg);width:${6+Math.random()*8}px;height:${6+Math.random()*8}px`;
+    container.appendChild(piece);
+    setTimeout(() => piece.remove(), 4000);
+  }
+}
+
+function bookmarkQ() { showToast('🔖 Question bookmarked!'); }
+function restartPractice() { location.reload(); }
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast toast-success';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+</script>
+</body>
+</html>
