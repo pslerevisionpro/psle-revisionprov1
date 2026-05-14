@@ -176,7 +176,7 @@ setChildWeakAreas(weak || [])
     if (!bestScores[key] || r.pct > bestScores[key]) bestScores[key] = clamp(r.pct)
   })
   const attempted      = Object.values(bestScores)
-  const overallAvg     = attempted.length > 0 ? Math.round(attempted.reduce((a,b)=>a+b,0)/attempted.length) : 0
+  const overallAvg     = childResults.length > 0 ? Math.round(childResults.reduce((a,b)=>a+clamp(b.pct),0)/childResults.length) : 0
   const totalAttempts  = childResults.length
   const recentResults  = [...childResults].reverse().slice(0, 5)
   const oneWeekAgo     = new Date(Date.now() - 7*24*60*60*1000)
