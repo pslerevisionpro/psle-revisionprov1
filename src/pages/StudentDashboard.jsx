@@ -318,7 +318,7 @@ export default function StudentDashboard() {
             {/* Subjects */}
             <div style={s.sectionHeader}>
               <h2 style={s.sectionTitle}>Subjects</h2>
-              <Link to="/subjects" className="btn btn-primary btn-sm">Choose Subject →</Link>
+              <Link to="/subjects" className="btn btn-primary btn-sm">Practice →</Link>
             </div>
             {loading?<div className="spinner"/>:(
               <div style={s.subGrid}>
@@ -361,7 +361,10 @@ export default function StudentDashboard() {
               <p style={s.sideCardTitle}>🚀 Start Practising</p>
               <p style={s.sideCardDesc}>Choose a subject and pick how many questions — 10, 20, or full 60.</p>
               <Link to="/subjects" className="btn btn-primary btn-full" style={{ marginTop:14, fontSize:'0.9rem' }}>
-                'Choose Subject & Mode →'
+                Choose Subject & Mode →
+              </Link>
+              <Link to="/mock/maths" className="btn btn-outline btn-full" style={{ marginTop:8, fontSize:'0.9rem' }}>
+                🎓 Take Maths Mock Exam
               </Link>
             </div>
 
