@@ -59,6 +59,7 @@ export function useQuestions(subject, options = {}) {
       if (bloomsLevel) query = query.eq('blooms_level', bloomsLevel)
 
       const { data, error: err } = await query
+      console.log('useQuestions debug:', subject, cfg.standard, cfg.name, 'rows:', data?.length, 'err:', err?.message)
       if (err) { setError(err.message); setLoading(false); return }
       console.log('MATHS DEBUG:', subject, cfg.standard, data?.length, err)
 
