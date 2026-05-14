@@ -60,6 +60,7 @@ export function useQuestions(subject, options = {}) {
 
       const { data, error: err } = await query
       if (err) { setError(err.message); setLoading(false); return }
+      console.log('MATHS DEBUG:', subject, cfg.standard, data?.length, err)
 
       const allQuestions = (data || []).map(q => convertQuestion(q, cfg.optionsFormat))
       if (allQuestions.length === 0) { setQuestions([]); setLoading(false); return }
