@@ -9,7 +9,7 @@ const sb = createClient(SUPA_URL, SUPA_KEY)
 
 const SUBJECT_NAME_TO_KEY = {
   'Mathematics':    'maths',
-  'Science':        'science',
+  'science':        'science',
   'English':        'english',
   'Setswana':       'setswana',
   'Social Studies': 'social',
