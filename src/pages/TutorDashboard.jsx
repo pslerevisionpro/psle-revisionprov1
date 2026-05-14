@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Navbar from '../components/Navbar'
+import { SubjectHistory } from '../components/SubjectHistory'
 
 const SUBJECTS = [
   { key: 'science',     name: 'Science',       emoji: '🔬' },
@@ -220,7 +221,7 @@ setStudentWeakAreas(weak || [])
     attemptsBySubject[key].push({ ...r, pct: clamp(r.pct) })
   })
   const attempted      = Object.values(bestScores)
-  const overallAvg     = attempted.length > 0 ? Math.round(attempted.reduce((a,b)=>a+b,0)/attempted.length) : 0
+  const overallAvg     = studentResults.length > 0 ? Math.round(studentResults.reduce((a,b)=>a+clamp(b.pct),0)/studentResults.length) : 0
   const totalAttempts  = studentResults.length
   const recentResults  = [...studentResults].reverse().slice(0, 6)
   const oneWeekAgo     = new Date(Date.now() - 7*24*60*60*1000)
@@ -472,64 +473,79 @@ setStudentWeakAreas(weak || [])
 
                 {/* Subjects tab */}
                 {activeTab==='subjects' && (
-                  <div style={s.subGrid}>
-                    {SUBJECTS.map(sub => {
-                      const key        = sub.name.toLowerCase()
-                      const best       = bestScores[key] ?? null
-                      const subResults = attemptsBySubject[key] || []
-                      const subAvg     = subResults.length>0 ? Math.round(subResults.reduce((a,r)=>a+r.pct,0)/subResults.length) : null
-                      const latest     = subResults.length>0 ? subResults[subResults.length-1].pct : null
-                      return (
-                        <div key={sub.key} style={{ ...s.subCard, borderLeft:`3px solid ${best!==null?gradeColor(best):'#E8E8E8'}` }}>
-                          <Ring pct={best??0} size={56}/>
-                          <div style={{ flex:1 }}>
-                            <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:4 }}>
-                              <span style={{ fontSize:'1rem' }}>{sub.emoji}</span>
-                              <span style={s.subName}>{sub.name}</span>
-                            </div>
-                            {best !== null ? (
-                              <>
-                                <div style={{ display:'flex', gap:12, flexWrap:'wrap', marginBottom:4 }}>
-                                  <span style={{ fontSize:'0.72rem', color:'#888' }}>Best: <strong style={{ color:gradeColor(best) }}>{best}%</strong></span>
-                                  {subAvg!==null&&<span style={{ fontSize:'0.72rem', color:'#888' }}>Avg: <strong style={{ color:gradeColor(subAvg) }}>{subAvg}%</strong></span>}
-                                  {latest!==null&&<span style={{ fontSize:'0.72rem', color:'#888' }}>Latest: <strong style={{ color:gradeColor(latest) }}>{latest}%</strong></span>}
-                                </div>
-                                <p style={{ fontSize:'0.7rem', color:'#AAA' }}>{subResults.length} attempt{subResults.length>1?'s':''} · Grade {gradeLetter(best)}</p>
-                                <div style={{ height:4, background:'#F0F0F0', borderRadius:100, overflow:'hidden', marginTop:6 }}>
-                                  <div style={{ width:`${best}%`, height:'100%', background:gradeColor(best), borderRadius:100, transition:'width 0.6s ease' }}/>
-                                </div>
-                              </>
-                            ) : (
-                              <p style={{ fontSize:'0.75rem', color:'#CCC', fontStyle:'italic' }}>Not attempted — assign as homework</p>
-                            )}
-                          </div>
+                  <div>
+                    {[...new Set(studentResults.map(r => r.subject).filter(Boolean))].length > 0 ? (
+                      <div style={{ marginBottom:20 }}>
+                        <div style={s.sectionHeader}>
+                          <h2 style={s.sectionTitle}>Subject Score History</h2>
+                          <span style={{ fontSize:'0.78rem', color:'#AAA' }}>7-day · 4-week · all time</span>
                         </div>
-                      )
-                    })}
+                        {[...new Set(studentResults.map(r => r.subject).filter(Boolean))].map(subject => (
+                          <SubjectHistory key={subject} subjectName={subject} results={studentResults.filter(r => r.subject === subject)} />
+                        ))}
+                      </div>
+                    ) : (
+                      <div style={{ textAlign:'center', padding:'40px 0', color:'#AAA', fontSize:'0.88rem' }}>
+                        No subjects attempted yet. Assign a quiz to get started.
+                      </div>
+                    )}
+                    {notAttempted.length > 0 && (
+                      <div>
+                        <p style={{ fontSize:'0.8rem', fontWeight:600, color:'#AAA', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:10 }}>Not yet attempted</p>
+                        <div style={{ display:'flex', flexWrap:'wrap', gap:8 }}>
+                          {notAttempted.map(sub => (
+                            <div key={sub.key} style={{ display:'flex', alignItems:'center', gap:6, background:'var(--ivory)', border:'1px solid var(--ivory-dk)', borderRadius:8, padding:'6px 12px' }}>
+                              <span>{sub.emoji}</span>
+                              <span style={{ fontSize:'0.82rem', fontWeight:600, color:'#AAA' }}>{sub.name}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
 
                 {/* History tab */}
                 {activeTab==='history' && (
-                  <div style={s.historyCard}>
-                    <p style={s.chartTitle}>Full Quiz History</p>
-                    {[...studentResults].reverse().length===0 ? (
+                  <div>
+                    {studentResults.length===0 ? (
                       <p style={{ color:'#AAA', fontSize:'0.85rem', padding:'16px 0' }}>No attempts yet.</p>
-                    ) : [...studentResults].reverse().map((r,i)=>(
-                      <div key={i} style={s.histRow}>
-                        <div style={s.histLeft}>
-                          <div style={{ ...s.histDot, background:gradeColor(clamp(r.pct)) }}/>
-                          <div>
-                            <p style={s.histSubject}>{r.subject}</p>
-                            <p style={s.histDate}>{new Date(r.created_at).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'})}</p>
-                          </div>
-                        </div>
-                        <div style={{ textAlign:'right' }}>
-                          <p style={{ ...s.histScore, color:gradeColor(clamp(r.pct)) }}>{clamp(r.pct)}%</p>
-                          <p style={s.histDetail}>{r.score}/{r.total} · Grade {gradeLetter(clamp(r.pct))}</p>
-                        </div>
+                    ) : (
+                      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14 }}>
+                        {SUBJECTS.filter(sub => (attemptsBySubject[sub.name.toLowerCase()]||[]).length > 0).map(sub => {
+                          const subRes = [...(attemptsBySubject[sub.name.toLowerCase()]||[])].reverse()
+                          const subAvg = Math.round(subRes.reduce((a,r)=>a+clamp(r.pct),0)/subRes.length)
+                          return (
+                            <div key={sub.key} style={{ background:'var(--white)', border:'1px solid var(--ivory-dk)', borderRadius:14, padding:'16px 18px' }}>
+                              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:12, paddingBottom:10, borderBottom:'1px solid var(--ivory-dk)' }}>
+                                <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                                  <span style={{ fontSize:'1.1rem' }}>{sub.emoji}</span>
+                                  <span style={{ fontFamily:'var(--font-display)', fontSize:'0.95rem', color:'var(--forest)', fontWeight:600 }}>{sub.name}</span>
+                                </div>
+                                <span style={{ fontSize:'0.78rem', fontWeight:700, color:gradeColor(subAvg), background:gradeColor(subAvg)+'15', padding:'3px 8px', borderRadius:20 }}>avg {subAvg}%</span>
+                              </div>
+                              <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
+                                {subRes.slice(0,6).map((r,i) => (
+                                  <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'5px 0', borderBottom:'1px solid #F5F5F5' }}>
+                                    <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+                                      <div style={{ width:6, height:6, borderRadius:'50%', background:gradeColor(clamp(r.pct)), flexShrink:0 }}/>
+                                      <span style={{ fontSize:'0.72rem', color:'#888' }}>{new Date(r.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span>
+                                    </div>
+                                    <div style={{ textAlign:'right' }}>
+                                      <span style={{ fontSize:'0.78rem', fontWeight:700, color:gradeColor(clamp(r.pct)) }}>{clamp(r.pct)}%</span>
+                                      <span style={{ fontSize:'0.68rem', color:'#AAA', marginLeft:6 }}>{r.score}/{r.total}</span>
+                                    </div>
+                                  </div>
+                                ))}
+                                {subRes.length > 6 && (
+                                  <p style={{ fontSize:'0.7rem', color:'#AAA', textAlign:'center', marginTop:4 }}>+{subRes.length-6} more</p>
+                                )}
+                              </div>
+                            </div>
+                          )
+                        })}
                       </div>
-                    ))}
+                    )}
                   </div>
                 )}
 
