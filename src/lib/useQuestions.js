@@ -1,30 +1,36 @@
 import { useState, useEffect } from 'react'
 import { supabase } from './supabase'
 
-function convertQuestion(q) {
+const SUBJECT_CONFIG = {
+  science: {
+    name: 'Science', standard: 6, filterBy: 'subject_area', optionsFormat: 'array',
+    subjectAreas: ['Ecology','Conservation','Environment & Pollution','Solutions & Mixtures','Hard & Soft Water','Weather & Climate','Earth & Space','States of Matter','Elements & Compounds','Energy Concepts','Heat Transfer','Light','Sound','Acids & Alkalis','Forces & Friction','Levers & Machines','Electric Circuits','Lightning & Static','Energy Sources','Human Reproduction','Science & Technology','Science Careers','Science Skills','General Science'],
+  },
+  maths:       { name: 'Mathematics',    standard: 7, filterBy: 'subject', optionsFormat: 'columns' },
+  english:     { name: 'English',        standard: 7, filterBy: 'subject', optionsFormat: 'columns' },
+  setswana:    { name: 'Setswana',       standard: 7, filterBy: 'subject', optionsFormat: 'columns' },
+  agriculture: { name: 'Agriculture',    standard: 7, filterBy: 'subject', optionsFormat: 'columns' },
+  social:      { name: 'Social Studies', standard: 7, filterBy: 'subject', optionsFormat: 'columns' },
+  rme:         { name: 'RME',            standard: 7, filterBy: 'subject', optionsFormat: 'columns' },
+}
+
+function convertQuestion(q, optionsFormat) {
   const letterToIndex = { A: 0, B: 1, C: 2, D: 3 }
-  const options = q.options.map(o => o.text)
-  const correctIndex = letterToIndex[q.correct_answer] ?? 0
+  const options = optionsFormat === 'columns'
+    ? [q.option_a, q.option_b, q.option_c, q.option_d]
+    : (q.options || []).map(o => (typeof o === 'string' ? o : o.text))
   return {
-    id:              q.id,
-    paper_id:        q.paper_id,
-    question:        q.question_text,
-    options,
-    correct:         correctIndex,
-    explanation:     q.explanation || q.context_text || `The correct answer is ${q.correct_answer}.`,
-    subject_area:    q.subject_area,
-    blooms_level:    q.blooms_level,
-    difficulty:      q.difficulty,
-    curriculum_code: q.curriculum_code,
+    id: q.id, paper_id: q.paper_id, question: q.question_text, options,
+    correct: letterToIndex[q.correct_answer] ?? 0,
+    explanation: q.explanation || q.context_text || `The correct answer is ${q.correct_answer}.`,
+    subject_area: q.subject_area, blooms_level: q.blooms_level,
+    difficulty: q.difficulty, curriculum_code: q.curriculum_code,
   }
 }
 
 function shuffle(arr) {
   const a = [...arr]
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]]
-  }
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]] }
   return a
 }
 
@@ -34,48 +40,20 @@ export function useQuestions(subject, options = {}) {
   const [loading, setLoading]     = useState(true)
   const [error, setError]         = useState(null)
 
-  const SUBJECT_MAP = {
-    science: [
-      'Ecology','Conservation','Environment & Pollution',
-      'Solutions & Mixtures','Hard & Soft Water','Weather & Climate',
-      'Earth & Space','States of Matter','Elements & Compounds',
-      'Energy Concepts','Heat Transfer','Light','Sound',
-      'Acids & Alkalis','Forces & Friction','Levers & Machines',
-      'Electric Circuits','Lightning & Static','Energy Sources',
-      'Human Reproduction','Science & Technology','Science Careers',
-      'Science Skills','General Science'
-    ],
-    maths:       [],
-    english:     [],
-    setswana:    [],
-    agriculture: [],
-    social:      [],
-    rme:         [],
-  }
-
   useEffect(() => {
     async function fetchQuestions() {
-      setLoading(true)
-      setError(null)
+      setLoading(true); setError(null)
+      const cfg = SUBJECT_CONFIG[subject]
+      if (!cfg) { setQuestions([]); setLoading(false); return }
 
-      // Return empty for subjects with no questions yet
-      if (!paperId && SUBJECT_MAP[subject] && SUBJECT_MAP[subject].length === 0) {
-        setQuestions([])
-        setLoading(false)
-        return
-      }
-
-      // ── 1. Fetch ALL questions for this subject ──────────────
       let query = supabase
         .from('questions')
-        .select('id,paper_id,question_text,options,correct_answer,context_text,explanation,subject_area,blooms_level,difficulty,curriculum_code')
-        .eq('standard', 6)
+        .select('id,paper_id,question_text,options,option_a,option_b,option_c,option_d,correct_answer,context_text,explanation,subject_area,blooms_level,difficulty,curriculum_code')
+        .eq('standard', cfg.standard)
 
-      if (paperId) {
-        query = query.eq('paper_id', paperId)
-      } else if (SUBJECT_MAP[subject]?.length > 0) {
-        query = query.in('subject_area', SUBJECT_MAP[subject])
-      }
+      if (paperId) { query = query.eq('paper_id', paperId) }
+      else if (cfg.filterBy === 'subject_area') { query = query.in('subject_area', cfg.subjectAreas) }
+      else if (cfg.filterBy === 'subject')      { query = query.eq('subject', cfg.name) }
 
       if (difficulty)  query = query.eq('difficulty', difficulty)
       if (bloomsLevel) query = query.eq('blooms_level', bloomsLevel)
@@ -83,52 +61,25 @@ export function useQuestions(subject, options = {}) {
       const { data, error: err } = await query
       if (err) { setError(err.message); setLoading(false); return }
 
-      const allQuestions = (data || []).map(convertQuestion)
+      const allQuestions = (data || []).map(q => convertQuestion(q, cfg.optionsFormat))
       if (allQuestions.length === 0) { setQuestions([]); setLoading(false); return }
 
-      // ── 2. Get current user session ──────────────────────────
       const { data: { session } } = await supabase.auth.getSession()
+      if (!session) { setQuestions(shuffle(allQuestions).slice(0, limit || allQuestions.length)); setLoading(false); return }
 
-      if (!session) {
-        // Guest — just shuffle and slice
-        setQuestions(shuffle(allQuestions).slice(0, limit || allQuestions.length))
-        setLoading(false)
-        return
-      }
-
-      // ── 3. Fetch questions already attempted by this student ─
-      const { data: attempted } = await supabase
-        .from('student_attempts')
-        .select('question_id')
-        .eq('student_id', session.user.id)
-
+      const { data: attempted } = await supabase.from('student_attempts').select('question_id').eq('student_id', session.user.id)
       const attemptedIds = new Set((attempted || []).map(a => a.question_id))
-
-      // ── 4. Split into unseen and seen ────────────────────────
       const unseen = allQuestions.filter(q => !attemptedIds.has(q.id))
       const seen   = allQuestions.filter(q =>  attemptedIds.has(q.id))
-
-      // ── 5. Mastery-first selection ───────────────────────────
       const target = limit || allQuestions.length
 
       let selected = []
+      if (unseen.length >= target)      { selected = shuffle(unseen).slice(0, target) }
+      else if (unseen.length > 0)       { selected = [...shuffle(unseen), ...shuffle(seen).slice(0, target - unseen.length)] }
+      else                              { selected = shuffle(allQuestions).slice(0, target) }
 
-      if (unseen.length >= target) {
-        // Enough unseen — shuffle unseen and take limit
-        selected = shuffle(unseen).slice(0, target)
-      } else if (unseen.length > 0) {
-        // Some unseen — use all unseen, fill remainder from shuffled seen
-        const needed = target - unseen.length
-        selected = [...shuffle(unseen), ...shuffle(seen).slice(0, needed)]
-      } else {
-        // All seen — shuffle full bank and recycle
-        selected = shuffle(allQuestions).slice(0, target)
-      }
-
-      setQuestions(selected)
-      setLoading(false)
+      setQuestions(selected); setLoading(false)
     }
-
     fetchQuestions()
   }, [subject, paperId, limit, difficulty, bloomsLevel])
 
