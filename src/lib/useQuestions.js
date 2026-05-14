@@ -59,9 +59,7 @@ export function useQuestions(subject, options = {}) {
       if (bloomsLevel) query = query.eq('blooms_level', bloomsLevel)
 
       const { data, error: err } = await query
-      console.log('useQuestions debug:', subject, cfg.standard, cfg.name, 'rows:', data?.length, 'err:', err?.message)
       if (err) { setError(err.message); setLoading(false); return }
-      console.log('MATHS DEBUG:', subject, cfg.standard, data?.length, err)
 
       const allQuestions = (data || []).map(q => convertQuestion(q, cfg.optionsFormat))
       if (allQuestions.length === 0) { setQuestions([]); setLoading(false); return }
@@ -87,4 +85,3 @@ export function useQuestions(subject, options = {}) {
 
   return { questions, loading, error }
 }
-// cache bust Thu May 14 07:22:38 EDT 2026
