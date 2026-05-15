@@ -1,0 +1,1202 @@
+[
+  {
+    "question_text": "Which of the following capital cities is correctly matched to its country?",
+    "option_a": "Lilongwe \u2013 Zambia",
+    "option_b": "Khartoum \u2013 Egypt",
+    "option_c": "Maseru \u2013 Swaziland",
+    "option_d": "Luanda \u2013 Angola",
+    "correct_answer": "D",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which continent is bigger than Africa?",
+    "option_a": "Asia",
+    "option_b": "Europe",
+    "option_c": "Australia",
+    "option_d": "North America",
+    "correct_answer": "A",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which one of these climates is hot and wet throughout the year?",
+    "option_a": "Tropical Savanna",
+    "option_b": "Mediterranean",
+    "option_c": "Equatorial",
+    "option_d": "Desert",
+    "correct_answer": "C",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which of the following is NOT an element of culture?",
+    "option_a": "Language",
+    "option_b": "Beliefs",
+    "option_c": "Skin Colour",
+    "option_d": "Food",
+    "correct_answer": "C",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "culture"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "How often does Botswana conduct a population census?",
+    "option_a": "Every 7 years",
+    "option_b": "Every 8 years",
+    "option_c": "Every 9 years",
+    "option_d": "Every 10 years",
+    "correct_answer": "D",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "population"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which of the following ways of life did Batswana learn from European Christian Missionaries?",
+    "option_a": "Rearing cattle",
+    "option_b": "Growing crops",
+    "option_c": "Reading and writing",
+    "option_d": "Praying to ancestors",
+    "correct_answer": "C",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "How did the Batswana oppose foreign rule?",
+    "option_a": "They prevented Bechuanaland from being part of Malawi",
+    "option_b": "They prevented Namibia from being a part of Zimbabwe",
+    "option_c": "They prevented Bechuanaland from being part of Zimbabwe",
+    "option_d": "They prevented South Africa from being part of Zimbabwe",
+    "correct_answer": "C",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "What is Nationalism?",
+    "option_a": "To choose own leaders and have own independence",
+    "option_b": "To be ruled by foreigners and Africans",
+    "option_c": "To be a colony under white rule only",
+    "option_d": "To have a colonial government fully",
+    "correct_answer": "A",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "What was Hut Tax used for?",
+    "option_a": "To pay for animal health services",
+    "option_b": "To pay housing rentals for High Commissioner",
+    "option_c": "To pay Dikgosi and Herdmen",
+    "option_d": "To pay for costs of governing Bechuanaland",
+    "correct_answer": "D",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 3,
+    "blooms_level": "Apply",
+    "blooms_level_num": 3,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which of the following political parties was formed before independence?",
+    "option_a": "Bechuanaland Peoples' Party, Botswana National Front, New Democratic",
+    "option_b": "Bechuanaland Federal Party, Bechuanaland Peoples' Party, Bechuanaland Democratic Party",
+    "option_c": "Bechuanaland Federal Party, MELS, Botswana Congress Party",
+    "option_d": "Bechuanaland Democratic Party, Botswana National Front, Botswana Congress Party",
+    "correct_answer": "B",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which of the following is a result of human activities in the equatorial environment?",
+    "option_a": "Higher rainfall",
+    "option_b": "Deforestation",
+    "option_c": "Increased soil fertility",
+    "option_d": "Conservation of animals",
+    "correct_answer": "B",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "environment"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "If it is 4:00 p.m at longitude 60E, what time will it be at 105E?",
+    "option_a": "5:00 p.m",
+    "option_b": "6:00 p.m",
+    "option_c": "7:00 p.m",
+    "option_d": "8:00 p.m",
+    "correct_answer": "C",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which type of vegetation in Africa has short grass and short trees?",
+    "option_a": "Deciduous forest",
+    "option_b": "Savanna bushveld",
+    "option_c": "Mediterranean",
+    "option_d": "Equatorial rainforest",
+    "correct_answer": "A",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which ethnic group is associated with the traditional dress shown?",
+    "option_a": "Basarwa",
+    "option_b": "Bayei",
+    "option_c": "Bambukushu",
+    "option_d": "Baherero",
+    "correct_answer": "D",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which of the following is a problem that can be caused by a population increase?",
+    "option_a": "Less pressure on the environment",
+    "option_b": "More people will be deployed",
+    "option_c": "Overcrowding and land shortage",
+    "option_d": "More people to buy goods",
+    "correct_answer": "A",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 3,
+    "blooms_level": "Apply",
+    "blooms_level_num": 3,
+    "topic_tags": [
+      "population"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which of the following is not an ethnic group found in Botswana?",
+    "option_a": "Bayei",
+    "option_b": "Bangwato",
+    "option_c": "Balozi",
+    "option_d": "Balete",
+    "correct_answer": "C",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Mmapula is a nurse in Botswana now living and working in South Africa. This is an example of",
+    "option_a": "Rural urban migration",
+    "option_b": "Urban rural migration",
+    "option_c": "Internal migration",
+    "option_d": "International migration",
+    "correct_answer": "D",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "How many continents are there in the world?",
+    "option_a": "4",
+    "option_b": "6",
+    "option_c": "3",
+    "option_d": "8",
+    "correct_answer": "B",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which line of longitude is marked 0 degrees?",
+    "option_a": "Equator",
+    "option_b": "Tropic Of Cancer",
+    "option_c": "Tropic Of Capricorn",
+    "option_d": "Greenwich Meridian",
+    "correct_answer": "D",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "How did Dikgosi react to the threat of British South Africa Company?",
+    "option_a": "They were grateful and appreciated",
+    "option_b": "They protested the transfer of Bechuanaland to the B.S.A. Company",
+    "option_c": "They developed some mines and markets",
+    "option_d": "They oppressed other Botswana",
+    "correct_answer": "B",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Why did the British South Africa Company want to take over Bechuanaland?",
+    "option_a": "To build a railway line from Cape Town",
+    "option_b": "To allow Boers to have control over Transvaal",
+    "option_c": "To permit Boers to rear livestock and grow crops",
+    "option_d": "To allow Africans their independence",
+    "correct_answer": "A",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "How were the first general elections conducted?",
+    "option_a": "They used the first past the post system",
+    "option_b": "They used the Block Vote system",
+    "option_c": "They used Two Round system",
+    "option_d": "They used the Alternative Vote",
+    "correct_answer": "A",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which of the following is a way of preserving culture?",
+    "option_a": "Teaching and practicing culture",
+    "option_b": "Changing peoples' way of life",
+    "option_c": "Teaching children a foreign language",
+    "option_d": "Adopting a new religion",
+    "correct_answer": "A",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "culture"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "What is meant by the word Polygamy?",
+    "option_a": "Marrying one wife or husband",
+    "option_b": "Marrying from one family",
+    "option_c": "Marrying many wives",
+    "option_d": "Marrying many times",
+    "correct_answer": "C",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Whose ancestors are believed to be the earliest inhabitants of Botswana?",
+    "option_a": "Bakgalagadi",
+    "option_b": "Bakalanga",
+    "option_c": "Basarwa",
+    "option_d": "Bakgatla",
+    "correct_answer": "C",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which cultural practice may discourage the spread of HIV/AIDS?",
+    "option_a": "Seantlo",
+    "option_b": "Bojale",
+    "option_c": "Polygamy",
+    "option_d": "Go Dupa",
+    "correct_answer": "B",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which of the following is an example of internal migration?",
+    "option_a": "Moving from Mochudi to settle in South Africa",
+    "option_b": "Moving from Zimbabwe to settle in Botswana",
+    "option_c": "Moving from Molepolole to settle in Gaborone",
+    "option_d": "Moving from Botswana to settle in America",
+    "correct_answer": "C",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which of the following was a change to Dikgosi after colonisation?",
+    "option_a": "Dikgosi lost their power/Authority",
+    "option_b": "Dikgosi continued to try cases and conflicts",
+    "option_c": "Chiefs care for stray cattle in their area",
+    "option_d": "Chiefs allocate land to their people",
+    "correct_answer": "A",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "In which continent do we find Brazil?",
+    "option_a": "Africa",
+    "option_b": "Asia",
+    "option_c": "America",
+    "option_d": "Europe",
+    "correct_answer": "C",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which of the following countries is not found in Africa?",
+    "option_a": "Morocco",
+    "option_b": "Western Sahara",
+    "option_c": "Eritrea",
+    "option_d": "Mexico",
+    "correct_answer": "D",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which climatic region is characterised by dry summer and wet winters?",
+    "option_a": "Humid Subtropical",
+    "option_b": "Desert",
+    "option_c": "Semi Desert",
+    "option_d": "Mediterranean",
+    "correct_answer": "D",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which of the following is not an importance of population census?",
+    "option_a": "Size and composition of the different aged group in population",
+    "option_b": "The number of people who are employed and their level of education",
+    "option_c": "Type and size of houses that people live in",
+    "option_d": "Shortage of facilities such as schools and hospitals",
+    "correct_answer": "D",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "population"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which of the following desert is the largest in the world?",
+    "option_a": "Sahara",
+    "option_b": "Namib",
+    "option_c": "Kgalagadi",
+    "option_d": "Sahel",
+    "correct_answer": "A",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Choose the correct order of leaders in Bechuanaland, most senior first",
+    "option_a": "District Commissioner, Resident Commissioner, High Commissioner, Dikgosi",
+    "option_b": "Dikgosi, Resident Commissioner, High Commissioner, District Commissioner",
+    "option_c": "High Commissioner, Resident Commissioner, Dikgosi, District Commissioner",
+    "option_d": "High Commissioner, Resident Commissioner, District Commissioner, Dikgosi",
+    "correct_answer": "D",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "How does culture contribute to the economy of the country?",
+    "option_a": "It encourages nepotism",
+    "option_b": "It attracts tourists",
+    "option_c": "It contributes to tribalism",
+    "option_d": "It brings xenophobia",
+    "correct_answer": "B",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "culture"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "In which continent is Algeria?",
+    "option_a": "Australia",
+    "option_b": "Europe",
+    "option_c": "Africa",
+    "option_d": "Asia",
+    "correct_answer": "C",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "What is the name of the range of mountains marked R on the map?",
+    "option_a": "Drakensburg",
+    "option_b": "Magalisburg",
+    "option_c": "Atlas",
+    "option_d": "Kilimanjaro",
+    "correct_answer": "A",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "What is the name of the river marked Z on the map?",
+    "option_a": "Nossop",
+    "option_b": "Molopo",
+    "option_c": "Orange",
+    "option_d": "Limpopo",
+    "correct_answer": "D",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "What is the name of the lake marked P on the map?",
+    "option_a": "Nyasa",
+    "option_b": "Tangayika",
+    "option_c": "Kariba",
+    "option_d": "Victoria",
+    "correct_answer": "D",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which one of the following is a problem resulting from population growth?",
+    "option_a": "Enough water supply",
+    "option_b": "Reuse, reduce and recycle waste",
+    "option_c": "Shortage of facilities such as schools and hospitals",
+    "option_d": "Availability of facilities such as schools and hospitals",
+    "correct_answer": "C",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "population"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which of the following is a negative effect of cultural change?",
+    "option_a": "Some socio-economic practices have brought diseases like HIV/AIDS",
+    "option_b": "Introduction of schools in Africa enabled Africans to learn reading",
+    "option_c": "Technology makes people more knowledgeable",
+    "option_d": "Introduction of modern medicines has led to improvement on people's health",
+    "correct_answer": "A",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which of the following rivers is the longest in the world?",
+    "option_a": "Amazon River",
+    "option_b": "Nile River",
+    "option_c": "Limpopo River",
+    "option_d": "Vaal River",
+    "correct_answer": "A",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which of the following is the solution to the problems of population increase?",
+    "option_a": "Increased unemployment",
+    "option_b": "Creation of job opportunities",
+    "option_c": "Overcrowding in towns and villages",
+    "option_d": "Shortage of facilities such as school and hospitals",
+    "correct_answer": "B",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "population"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "What can families do in order to protect the environment?",
+    "option_a": "Cut down many trees and sell them for firewood",
+    "option_b": "Plant sorghum on the same piece of land",
+    "option_c": "Keep few cattle on a small piece of grazing land",
+    "option_d": "Burn the veld to reduce the number of ticks",
+    "correct_answer": "C",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "environment"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "What do we call a system of moving from one place to settle in another place?",
+    "option_a": "Migration",
+    "option_b": "Racism",
+    "option_c": "Xenophobia",
+    "option_d": "Discrimination",
+    "correct_answer": "A",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which of the following was not a traditional duty of a Kgosi?",
+    "option_a": "Creating new wards",
+    "option_b": "Forming new mophato",
+    "option_c": "Announcing the beginning of letsema",
+    "option_d": "Attending meetings of Ntlo Ya Dikgosi",
+    "correct_answer": "D",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which of the following is a pull factor for international migration?",
+    "option_a": "Availability of jobs",
+    "option_b": "Lack of employment",
+    "option_c": "Poverty",
+    "option_d": "Wars",
+    "correct_answer": "A",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which of the following is a problem caused by population increase?",
+    "option_a": "Less pressure on the environment",
+    "option_b": "More people being employed",
+    "option_c": "Over-crowding and land shortage",
+    "option_d": "Creation of jobs and salary increase",
+    "correct_answer": "C",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 3,
+    "blooms_level": "Apply",
+    "blooms_level_num": 3,
+    "topic_tags": [
+      "population"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which one is a reason for someone to leave his village and settle in a town?",
+    "option_a": "There are few jobs in villages",
+    "option_b": "There are expensive houses in town",
+    "option_c": "There are few jobs in town",
+    "option_d": "There are cheaper houses in villages",
+    "correct_answer": "A",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "How can we reduce the rate of rural urban migration?",
+    "option_a": "Making laws that will not allow people to leave rural areas",
+    "option_b": "Providing more and better housing in urban areas",
+    "option_c": "Providing better services and creating more jobs in rural areas",
+    "option_d": "Forcing people with no jobs to go back to rural areas",
+    "correct_answer": "C",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "What kind of environment does Mr. Botlhe live in? (He herds cattle with thorny trees, cactus, sengaparile, morama and moretlwa around him)",
+    "option_a": "Tropical Rainforest",
+    "option_b": "Grassland Savanna",
+    "option_c": "Shrub Savanna",
+    "option_d": "Desert",
+    "correct_answer": "D",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "environment"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "What kind of vegetation is found along the Equator?",
+    "option_a": "Desert",
+    "option_b": "Rainforest",
+    "option_c": "Savanna",
+    "option_d": "Tundra",
+    "correct_answer": "B",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which of the following statements is true about lines of latitude?",
+    "option_a": "They are parallel to the Tropic Of Capricorn",
+    "option_b": "They join places of the same heights",
+    "option_c": "They are parallel to the Equator",
+    "option_d": "They are used to calculate time",
+    "correct_answer": "C",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "What is the name of the line of latitude marked R on the world map?",
+    "option_a": "Equator",
+    "option_b": "Greenwich Meridian",
+    "option_c": "Tropic Of Cancer",
+    "option_d": "Tropic Of Capricorn",
+    "correct_answer": "D",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which continent is marked Q on the world map?",
+    "option_a": "America",
+    "option_b": "Africa",
+    "option_c": "Asia",
+    "option_d": "Europe",
+    "correct_answer": "C",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which is the position of Africa using lines of latitude?",
+    "option_a": "37 S and 34 N",
+    "option_b": "20 S and 25 N",
+    "option_c": "35 S and 42 N",
+    "option_d": "40 S and 40 N",
+    "correct_answer": "A",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "What is the name of the ocean labelled E on the world map?",
+    "option_a": "Atlantic",
+    "option_b": "Indian",
+    "option_c": "Pacific",
+    "option_d": "Mediterranean",
+    "correct_answer": "A",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Which one of the following African countries borders the Red Sea?",
+    "option_a": "Morocco",
+    "option_b": "Algeria",
+    "option_c": "Sudan",
+    "option_d": "Tunisia",
+    "correct_answer": "C",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "Why do most people live in the eastern part of Botswana?",
+    "option_a": "There is more rainfall and fertile soils",
+    "option_b": "The other parts are too wet",
+    "option_c": "The other parts are used as cattle posts",
+    "option_d": "It is nearer to the border with South Africa",
+    "correct_answer": "A",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  },
+  {
+    "question_text": "In which ethnic group was hunting and gathering the way of life?",
+    "option_a": "Bakgalagadi",
+    "option_b": "Bakalanga",
+    "option_c": "Basarwa",
+    "option_d": "Bangwaketse",
+    "correct_answer": "C",
+    "subject": "Social Studies",
+    "standard": 7,
+    "difficulty": 1,
+    "blooms_level": "Remember",
+    "blooms_level_num": 1,
+    "topic_tags": [
+      "history of Botswana"
+    ],
+    "subject_area": "social_studies",
+    "explanation": null,
+    "diagram_svg": null,
+    "paper_id": "ss7_t1_2019"
+  }
+]
