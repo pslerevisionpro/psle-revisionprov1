@@ -26,6 +26,31 @@ function shuffle(arr) {
   return a
 }
 
+function groupIntoBatches(questions) {
+  const soloGroups = []
+  const batchMap   = new Map()
+
+  for (const q of questions) {
+    if (!q.context_text) {
+      soloGroups.push({ questions: [q] })
+    } else {
+      if (!batchMap.has(q.context_text)) batchMap.set(q.context_text, [])
+      batchMap.get(q.context_text).push(q)
+    }
+  }
+
+  const SEQUENTIAL_PATTERN = /\b(arrange|correct order|which order|first|second|third|sequence|rearrange|put.*order)\b/i
+
+  const batches = [...batchMap.values()].map(qs => {
+    const sorted = [...qs].sort((a, b) => a.question_number - b.question_number)
+    const isSequential = sorted.some(q => SEQUENTIAL_PATTERN.test(q.question))
+    return { questions: isSequential ? sorted : shuffle(sorted) }
+  })
+
+  const allGroups = shuffle([...soloGroups, ...batches])
+  return allGroups.flatMap(g => g.questions)
+}
+
 function shuffleOptions(question) {
   const indexed = question.options.map((text, i) => ({ text, isCorrect: i === question.correct }))
   const shuffled = shuffle(indexed)
@@ -55,9 +80,10 @@ const { questions: rawQuestions, loading, error } = useQuestions(subject, {
   const [questions, setQuestions] = useState([])
   useEffect(() => {
     if (rawQuestions.length > 0) {
-      const pool = shuffle([...rawQuestions])
-      const picked = isGuest ? pool.slice(0, GUEST_LIMIT) : pool
-      setQuestions(picked.map(shuffleOptions))
+      const withShuffledOptions = rawQuestions.map(shuffleOptions)
+      const batched = groupIntoBatches(withShuffledOptions)
+      const picked  = isGuest ? batched.slice(0, GUEST_LIMIT) : batched
+      setQuestions(picked)
     }
   }, [rawQuestions])
 
@@ -238,14 +264,15 @@ if (session && !isGuest) {
           )}
 
           <p style={styles.questionLabel}>Question {current + 1}</p>
-          <h2 style={styles.questionText}>{question.question}</h2>
 
-          {/* Context text (scenario) */}
           {question.context_text && (
             <div style={styles.contextBox}>
-              📖 {question.context_text}
+              <div style={styles.contextLabel}>📖 Read the following, then answer the question</div>
+              <div style={styles.contextContent}>{question.context_text}</div>
             </div>
           )}
+
+          <h2 style={styles.questionText}>{question.question}</h2>
 
           <div style={styles.options}>
             {question.options.map((option, i) => {
@@ -321,7 +348,9 @@ const styles = {
   bloomsBadge:        { background: 'var(--forest)', color: '#fff', padding: '2px 8px', borderRadius: 20, fontSize: '0.7rem', fontWeight: 600 },
   questionLabel:      { fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--gold-dk)', marginBottom: 12 },
   questionText:       { fontFamily: 'var(--font-display)', fontSize: 'clamp(1.3rem, 2.5vw, 1.7rem)', color: 'var(--charcoal)', marginBottom: 20, lineHeight: 1.4 },
-  contextBox:         { background: '#f0f5ff', borderLeft: '4px solid var(--forest-lt)', borderRadius: '0 8px 8px 0', padding: '10px 14px', marginBottom: 20, fontSize: '0.9rem', color: 'var(--charcoal-lt)', fontStyle: 'italic' },
+  contextBox:     { background: '#f0f7ff', border: '1px solid #c7d9f5', borderLeft: '4px solid var(--forest)', borderRadius: '0 8px 8px 0', padding: '18px 20px', marginBottom: 24 },
+  contextLabel:   { fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--forest)', marginBottom: 10 },
+  contextContent: { fontSize: '0.93rem', color: 'var(--charcoal)', lineHeight: 1.75, whiteSpace: 'pre-line', maxHeight: 280, overflowY: 'auto', paddingRight: 4 },
   options:            { display: 'flex', flexDirection: 'column', gap: 12 },
   option:             { display: 'flex', alignItems: 'center', gap: 14, padding: '16px 20px', border: '2px solid var(--ivory-dk)', borderRadius: 'var(--radius-sm)', background: 'var(--white)', cursor: 'pointer', textAlign: 'left', transition: 'all 0.18s ease', fontFamily: 'var(--font-body)', fontSize: '0.97rem', color: 'var(--charcoal)' },
   optionSelected:     { borderColor: 'var(--forest-lt)', background: '#eef7f4' },
