@@ -27,28 +27,38 @@ function shuffle(arr) {
 }
 
 function groupIntoBatches(questions) {
+  // Separate passage-linked questions from standalone questions
   const soloGroups = []
-  const batchMap   = new Map()
+  const batchMap   = new Map()   // context_text → [questions]
 
   for (const q of questions) {
     if (!q.context_text) {
-      soloGroups.push({ questions: [q] })
+      soloGroups.push({ type: 'solo', questions: [q] })
     } else {
       if (!batchMap.has(q.context_text)) batchMap.set(q.context_text, [])
       batchMap.get(q.context_text).push(q)
     }
   }
 
-  const SEQUENTIAL_PATTERN = /\b(arrange|correct order|which order|first|second|third|sequence|rearrange|put.*order)\b/i
+  // Sequential question detection — keep original order if found
+  const SEQUENTIAL = /\b(arrange|correct order|which order|sequence|rearrange|put.*order)\b/i
 
-  const batches = [...batchMap.values()].map(qs => {
-    const sorted = [...qs].sort((a, b) => a.question_number - b.question_number)
-    const isSequential = sorted.some(q => SEQUENTIAL_PATTERN.test(q.question))
-    return { questions: isSequential ? sorted : shuffle(sorted) }
+  const passageLots = [...batchMap.values()].map(qs => {
+    // Always sort by question_number first to restore original order
+    const sorted       = [...qs].sort((a, b) => a.question_number - b.question_number)
+    const isSequential = sorted.some(q => SEQUENTIAL.test(q.question))
+    return {
+      type:      'batch',
+      questions: isSequential ? sorted : shuffle(sorted),
+    }
   })
 
-  const allGroups = shuffle([...soloGroups, ...batches])
-  return allGroups.flatMap(g => g.questions)
+  // Shuffle the LOTS against each other (solo questions and passage batches)
+  // Solo questions are individual lots — they shuffle freely between passage batches
+  const allLots = shuffle([...soloGroups, ...passageLots])
+
+  // Flatten: each lot's questions stay together in sequence
+  return allLots.flatMap(lot => lot.questions)
 }
 
 function shuffleOptions(question) {

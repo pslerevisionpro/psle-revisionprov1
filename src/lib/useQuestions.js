@@ -23,7 +23,8 @@ function convertQuestion(q, optionsFormat) {
     id: q.id, paper_id: q.paper_id, question: q.question_text, options,
     correct: letterToIndex[q.correct_answer] ?? 0,
     explanation:  q.explanation || `The correct answer is ${q.correct_answer}.`,
-    context_text: q.context_text || null,
+    context_text:    q.context_text || null,
+    question_number: q.question_number ?? 0,
     subject_area: q.subject_area, blooms_level: q.blooms_level,
     difficulty: q.difficulty, curriculum_code: q.curriculum_code,
   }
@@ -49,7 +50,7 @@ export function useQuestions(subject, options = {}) {
 
       let query = supabase
         .from('questions')
-        .select('id,paper_id,question_text,options,option_a,option_b,option_c,option_d,correct_answer,context_text,explanation,subject_area,blooms_level,difficulty,curriculum_code')
+        .select('id,paper_id,question_number,question_text,options,option_a,option_b,option_c,option_d,correct_answer,context_text,explanation,subject_area,blooms_level,difficulty,curriculum_code')
         .eq('standard', cfg.standard)
 
       if (paperId) { query = query.eq('paper_id', paperId) }
