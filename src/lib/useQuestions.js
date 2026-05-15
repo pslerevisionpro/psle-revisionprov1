@@ -22,7 +22,8 @@ function convertQuestion(q, optionsFormat) {
   return {
     id: q.id, paper_id: q.paper_id, question: q.question_text, options,
     correct: letterToIndex[q.correct_answer] ?? 0,
-    explanation: q.explanation || q.context_text || `The correct answer is ${q.correct_answer}.`,
+    explanation:  q.explanation || `The correct answer is ${q.correct_answer}.`,
+    context_text: q.context_text || null,
     subject_area: q.subject_area, blooms_level: q.blooms_level,
     difficulty: q.difficulty, curriculum_code: q.curriculum_code,
   }
