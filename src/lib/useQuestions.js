@@ -9,7 +9,7 @@ const SUBJECT_CONFIG = {
   maths:       { name: 'Mathematics',    standard: 6, filterBy: 'subject', optionsFormat: 'columns' },
   english:     { name: 'English',        standard: 7, filterBy: 'subject', optionsFormat: 'columns' },
   setswana:    { name: 'Setswana',       standard: 7, filterBy: 'subject', optionsFormat: 'columns' },
-  agriculture: { name: 'Agriculture',    standard: 7, filterBy: 'subject', optionsFormat: 'columns' },
+  agriculture: { name: 'Agriculture',    standard: 6, filterBy: 'subject', optionsFormat: 'columns' },
   social:      { name: 'Social Studies', standard: 7, filterBy: 'subject', optionsFormat: 'columns' },
   rme:         { name: 'RME',            standard: 7, filterBy: 'subject', optionsFormat: 'columns' },
 }
