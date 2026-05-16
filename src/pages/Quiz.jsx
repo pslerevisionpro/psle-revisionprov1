@@ -218,7 +218,10 @@ const { questions: rawQuestions, loading, error } = useQuestions(subject, {
   }
 
   function handleNext() {
-    if (skipped.has(current)) {
+    // Auto-mark as skipped if no answer selected
+    if (!revealed) {
+      setSkipped(prev => new Set([...prev, current]))
+    } else if (skipped.has(current)) {
       setSkipped(prev => { const n = new Set(prev); n.delete(current); return n })
     }
     if (current < questions.length - 1) {
