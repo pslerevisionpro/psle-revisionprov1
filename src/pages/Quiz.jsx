@@ -102,6 +102,7 @@ const { questions: rawQuestions, loading, error } = useQuestions(subject, {
   const [revealed, setRevealed] = useState(false)
   const [answers, setAnswers] = useState([])
   const [showExplanation, setShowExplanation] = useState(false)
+  const [skipped, setSkipped] = useState(new Set())
   const explanationRef = useRef(null)
 
   // ── Subject not found ──────────────────────────────────────
@@ -175,7 +176,46 @@ const { questions: rawQuestions, loading, error } = useQuestions(subject, {
     }])
   }
 
+  function handleSkip() {
+    setSkipped(prev => new Set([...prev, current]))
+    const nextUnskipped = questions.findIndex((_, i) => i > current && !skipped.has(i))
+    if (nextUnskipped !== -1) {
+      setCurrent(nextUnskipped)
+    } else {
+      // All remaining are skipped — go to first skipped
+      const firstSkipped = [...new Set([...skipped, current])][0]
+      setCurrent(firstSkipped !== undefined ? firstSkipped : current + 1)
+    }
+    setSelected(null)
+    setRevealed(false)
+    setShowExplanation(false)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   async function handleNext() {
+    // Remove from skipped if they answered it on return
+    if (skipped.has(current)) {
+      setSkipped(prev => { const n = new Set(prev); n.delete(current); return n })
+    }
+
+    // Find next unanswered+unskipped question
+    const nextIndex = questions.findIndex((_, i) => i > current && !answers.find(a => a.questionId === questions[i].id))
+
+    // Check if any skipped remain after this answer
+    const remainingSkipped = [...skipped].filter(i => i !== current && !answers.find(a => a.questionId === questions[i].id))
+
+    if (isLast || nextIndex === -1) {
+      if (remainingSkipped.length > 0) {
+        // Loop back to first skipped question
+        setCurrent(remainingSkipped[0])
+        setSelected(null)
+        setRevealed(false)
+        setShowExplanation(false)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        return
+      }
+    }
+
     if (isLast) {
       const finalAnswers = [...answers]
       // Add last answer if not yet recorded
@@ -251,6 +291,7 @@ if (session && !isGuest) {
             <span style={styles.subject}>{config.emoji} {config.name}</span>
             <span style={styles.counter}>
               Question {current + 1} of {questions.length}
+              {skipped.size > 0 && <span style={styles.skippedTag}> · {skipped.size} skipped</span>}
               {isGuest && <span style={styles.guestTag}> · Free Trial</span>}
             </span>
           </div>
@@ -323,6 +364,17 @@ if (session && !isGuest) {
           )}
         </div>
 
+        {!revealed && (
+          <div style={{ textAlign: 'right', marginTop: 16 }}>
+            <button
+              onClick={handleSkip}
+              style={styles.skipBtn}
+            >
+              Skip for now 🚩
+            </button>
+          </div>
+        )}
+
         {revealed && (
           <div style={{ textAlign: 'right', marginTop: 20 }}>
             <button
@@ -377,6 +429,8 @@ const styles = {
   explanationTitle:   { color: 'var(--forest)', fontFamily: 'var(--font-display)', fontSize: '1.1rem' },
   explanationText:    { color: 'var(--charcoal-lt)', fontSize: '0.93rem', lineHeight: 1.7 },
   curriculumCode:     { marginTop: 8, fontSize: '0.75rem', color: 'var(--charcoal-lt)', opacity: 0.6 },
+  skippedTag:  { color: '#E67E22', fontWeight: 600 },
+  skipBtn:     { background: 'none', border: '1.5px solid #E0E0E0', borderRadius: 8, padding: '10px 22px', fontSize: '0.88rem', fontWeight: 600, color: '#888', cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'all 0.15s' },
   loadingBar:         { width: 200, height: 4, background: 'var(--ivory-dk)', borderRadius: 4, margin: '24px auto 0', overflow: 'hidden' },
   loadingFill:        { height: '100%', width: '60%', background: 'var(--forest)', borderRadius: 4, animation: 'pulse 1.4s ease-in-out infinite' },
 }
