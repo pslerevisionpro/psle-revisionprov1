@@ -183,6 +183,8 @@ const { questions: rawQuestions, loading, error } = useQuestions(subject, {
     setSelected(optionIndex)
     setRevealed(true)
     setShowExplanation(false)
+    // Remove from skipped when answered
+    setSkipped(prev => prev.filter(i => i !== current))
     setTimeout(() => {
       setShowExplanation(true)
       setTimeout(() => explanationRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100)
