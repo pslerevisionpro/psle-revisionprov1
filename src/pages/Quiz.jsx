@@ -308,7 +308,7 @@ if (session && !isGuest) {
             <span style={styles.subject}>{config.emoji} {config.name}</span>
             <span style={styles.counter}>
               Question {current + 1} of {questions.length}
-              {skipped.length > 0 && <span style={styles.skippedTag}> · {skipped.size} skipped</span>}
+              {skipped.length > 0 && <span style={styles.skippedTag}> · {skipped.length} skipped</span>}
               {isGuest && <span style={styles.guestTag}> · Free Trial</span>}
             </span>
           </div>
