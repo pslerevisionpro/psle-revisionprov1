@@ -11,6 +11,23 @@ const CONFIGS = {
   english:{name:'English',emoji:'✏️'},setswana:{name:'Setswana',emoji:'🗣️'},
   agriculture:{name:'Agriculture',emoji:'🌱'},social:{name:'Social Studies',emoji:'🌍'},rme:{name:'RME',emoji:'📖'},
 }
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a}
+
+function groupIntoBatches(questions){
+  const soloGroups=[],batchMap=new Map()
+  for(const q of questions){
+    if(!q.context_text){soloGroups.push({questions:[q]})}
+    else{if(!batchMap.has(q.context_text))batchMap.set(q.context_text,[]);batchMap.get(q.context_text).push(q)}
+  }
+  const SEQUENTIAL=/\b(arrange|correct order|which order|sequence|rearrange|put.*order)\b/i
+  const passageLots=[...batchMap.values()].map(qs=>{
+    const sorted=[...qs].sort((a,b)=>a.question_number-b.question_number)
+    const isSeq=sorted.some(q=>SEQUENTIAL.test(q.question))
+    return{questions:isSeq?sorted:shuffle(sorted)}
+  })
+  return shuffle([...soloGroups,...passageLots]).flatMap(lot=>lot.questions)
+}
+
 function pad(n){return String(n).padStart(2,'0')}
 function fmt(s){const m=Math.floor(s/60);return`${pad(m)}:${pad(s%60)}`}
 
@@ -29,7 +46,7 @@ export default function MockExam() {
 
   useEffect(()=>{
     if(rawQ.length>0&&questions.length===0){
-      setQuestions([...rawQ].sort(()=>Math.random()-0.5).slice(0,60))
+      setQuestions(groupIntoBatches([...rawQ]).slice(0,60))
     }
   },[rawQ])
 
@@ -143,6 +160,12 @@ export default function MockExam() {
           </div>
         </div>
         <div style={{background:'#fff',borderRadius:16,boxShadow:'0 2px 16px rgba(27,61,47,0.08)',padding:'32px 28px',marginBottom:16}}>
+          {q.context_text&&(
+            <div style={{background:'#f0f7ff',border:'1px solid #c7d9f5',borderLeft:'4px solid var(--forest)',borderRadius:'0 8px 8px 0',padding:'16px 18px',marginBottom:20}}>
+              <div style={{fontSize:'0.7rem',fontWeight:700,textTransform:'uppercase',letterSpacing:'0.08em',color:'var(--forest)',marginBottom:8}}>📖 Read the following, then answer the question</div>
+              <div style={{fontSize:'0.91rem',color:'var(--charcoal)',lineHeight:1.75,whiteSpace:'pre-line',maxHeight:260,overflowY:'auto'}}>{q.context_text}</div>
+            </div>
+          )}
           <p style={{fontSize:'1.1rem',fontWeight:600,color:'var(--navy)',lineHeight:1.65,marginBottom:24,fontFamily:'var(--font-display)'}}>{q.question}</p>
           <div style={{display:'flex',flexDirection:'column',gap:10}}>
             {q.options.map((opt,i)=>{
