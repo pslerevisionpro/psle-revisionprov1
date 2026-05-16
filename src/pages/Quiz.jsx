@@ -97,6 +97,23 @@ const { questions: rawQuestions, loading, error } = useQuestions(subject, {
     }
   }, [rawQuestions])
 
+  // Restore revealed/selected state when navigating to a previously answered question
+  useEffect(() => {
+    if (questions.length === 0) return
+    const q = questions[current]
+    if (!q) return
+    const existing = answers.find(a => a.questionId === q.id)
+    if (existing) {
+      setSelected(existing.selected)
+      setRevealed(true)
+      setTimeout(() => setShowExplanation(true), 100)
+    } else {
+      setSelected(null)
+      setRevealed(false)
+      setShowExplanation(false)
+    }
+  }, [current, questions])
+
   const [current, setCurrent] = useState(0)
   const [selected, setSelected] = useState(null)
   const [revealed, setRevealed] = useState(false)
@@ -192,30 +209,17 @@ const { questions: rawQuestions, loading, error } = useQuestions(subject, {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  async function handleNext() {
-    // Remove from skipped if they answered it on return
+  function handleNext() {
     if (skipped.has(current)) {
       setSkipped(prev => { const n = new Set(prev); n.delete(current); return n })
     }
-
-    // Find next unanswered+unskipped question
-    const nextIndex = questions.findIndex((_, i) => i > current && !answers.find(a => a.questionId === questions[i].id))
-
-    // Check if any skipped remain after this answer
-    const remainingSkipped = [...skipped].filter(i => i !== current && !answers.find(a => a.questionId === questions[i].id))
-
-    if (isLast || nextIndex === -1) {
-      if (remainingSkipped.length > 0) {
-        // Loop back to first skipped question
-        setCurrent(remainingSkipped[0])
-        setSelected(null)
-        setRevealed(false)
-        setShowExplanation(false)
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        return
-      }
+    if (current < questions.length - 1) {
+      setCurrent(c => c + 1)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
+  }
 
+  async function handleFinish() {
     if (isLast) {
       const finalAnswers = [...answers]
       // Add last answer if not yet recorded
@@ -371,28 +375,39 @@ if (session && !isGuest) {
           )}
         </div>
 
-        {!revealed && (
-          <div style={{ textAlign: 'right', marginTop: 16 }}>
-            <button
-              onClick={handleSkip}
-              style={styles.skipBtn}
-            >
-              Skip for now 🚩
-            </button>
-          </div>
-        )}
+        <div style={styles.navBar}>
+          <button
+            onClick={handleBack}
+            disabled={current === 0}
+            style={{ ...styles.navBtn, opacity: current === 0 ? 0.35 : 1 }}
+          >
+            ← Back
+          </button>
 
-        {revealed && (
-          <div style={{ textAlign: 'right', marginTop: 20 }}>
-            <button
-              className="btn btn-primary"
-              onClick={handleNext}
-              style={{ padding: '14px 32px', fontSize: '1rem' }}
-            >
-              {isLast ? 'See My Results →' : 'Next Question →'}
-            </button>
-          </div>
-        )}
+          <button
+            onClick={handleSkip}
+            disabled={revealed}
+            style={{ ...styles.skipBtn, opacity: revealed ? 0.35 : 1, cursor: revealed ? 'default' : 'pointer' }}
+          >
+            Skip 🚩
+          </button>
+
+          {isLast
+            ? <button
+                className="btn btn-primary"
+                onClick={handleFinish}
+                style={{ padding: '12px 28px', fontSize: '0.95rem' }}
+              >
+                See Results →
+              </button>
+            : <button
+                onClick={handleNext}
+                style={styles.navBtnPrimary}
+              >
+                Next →
+              </button>
+          }
+        </div>
 
         <div style={{ textAlign: 'center', marginTop: 24 }}>
           <Link to="/dashboard" style={{ color: 'var(--charcoal-lt)', fontSize: '0.85rem' }}>← Exit Quiz</Link>
@@ -437,7 +452,10 @@ const styles = {
   explanationText:    { color: 'var(--charcoal-lt)', fontSize: '0.93rem', lineHeight: 1.7 },
   curriculumCode:     { marginTop: 8, fontSize: '0.75rem', color: 'var(--charcoal-lt)', opacity: 0.6 },
   skippedTag:  { color: '#E67E22', fontWeight: 600 },
-  skipBtn:     { background: 'none', border: '1.5px solid #E0E0E0', borderRadius: 8, padding: '10px 22px', fontSize: '0.88rem', fontWeight: 600, color: '#888', cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'all 0.15s' },
+  skipBtn:        { background: 'none', border: '1.5px solid #FFB74D', borderRadius: 8, padding: '10px 22px', fontSize: '0.88rem', fontWeight: 600, color: '#E67E22', cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'all 0.15s' },
+  navBar:         { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 24, gap: 12 },
+  navBtn:         { background: '#fff', border: '1.5px solid var(--ivory-dk)', borderRadius: 8, padding: '10px 22px', fontSize: '0.88rem', fontWeight: 600, color: 'var(--charcoal-lt)', cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'all 0.15s' },
+  navBtnPrimary:  { background: 'var(--forest)', border: 'none', borderRadius: 8, padding: '10px 24px', fontSize: '0.95rem', fontWeight: 700, color: 'var(--ivory)', cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'all 0.15s' },
   loadingBar:         { width: 200, height: 4, background: 'var(--ivory-dk)', borderRadius: 4, margin: '24px auto 0', overflow: 'hidden' },
   loadingFill:        { height: '100%', width: '60%', background: 'var(--forest)', borderRadius: 4, animation: 'pulse 1.4s ease-in-out infinite' },
 }
