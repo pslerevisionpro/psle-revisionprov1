@@ -193,6 +193,13 @@ const { questions: rawQuestions, loading, error } = useQuestions(subject, {
     }])
   }
 
+  function handleBack() {
+    if (current > 0) {
+      setCurrent(c => c - 1)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
   function handleSkip() {
     setSkipped(prev => new Set([...prev, current]))
     const nextUnskipped = questions.findIndex((_, i) => i > current && !skipped.has(i))
