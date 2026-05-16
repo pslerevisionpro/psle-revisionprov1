@@ -314,7 +314,14 @@ if (session && !isGuest) {
             </div>
           )}
 
-          <p style={styles.questionLabel}>Question {current + 1}</p>
+          <p style={styles.questionLabel}>
+            Question {current + 1}
+            {skipped.has(current) && (
+              <span style={{ marginLeft: 10, fontSize: '0.75rem', background: '#FFF3E0', color: '#E67E22', border: '1px solid #FFB74D', borderRadius: 20, padding: '2px 10px', fontWeight: 700 }}>
+                🚩 Skipped — come back to this
+              </span>
+            )}
+          </p>
 
           {question.context_text && (
             <div style={styles.contextBox}>
