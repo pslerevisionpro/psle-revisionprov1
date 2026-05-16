@@ -102,7 +102,7 @@ const { questions: rawQuestions, loading, error } = useQuestions(subject, {
   const [revealed, setRevealed] = useState(false)
   const [answers, setAnswers] = useState([])
   const [showExplanation, setShowExplanation] = useState(false)
-  const [skipped, setSkipped] = useState(new Set())
+  const [skipped, setSkipped] = useState([])
   const [showSkipped, setShowSkipped] = useState(false)
 
   // Restore state when navigating to a previously answered question
@@ -202,7 +202,7 @@ const { questions: rawQuestions, loading, error } = useQuestions(subject, {
   }
 
   function handleSkip() {
-    setSkipped(prev => new Set([...prev, current]))
+    setSkipped(prev => prev.includes(current) ? prev : [...prev, current])
     const nextUnskipped = questions.findIndex((_, i) => i > current && !skipped.has(i))
     if (nextUnskipped !== -1) {
       setCurrent(nextUnskipped)
@@ -220,9 +220,9 @@ const { questions: rawQuestions, loading, error } = useQuestions(subject, {
   function handleNext() {
     // Auto-mark as skipped if no answer selected
     if (!revealed) {
-      setSkipped(prev => new Set([...prev, current]))
-    } else if (skipped.has(current)) {
-      setSkipped(prev => { const n = new Set(prev); n.delete(current); return n })
+      setSkipped(prev => prev.includes(current) ? prev : [...prev, current])
+    } else if (skipped.includes(current)) {
+      setSkipped(prev => prev.filter(i => i !== current))
     }
     if (current < questions.length - 1) {
       setCurrent(c => c + 1)
@@ -306,7 +306,7 @@ if (session && !isGuest) {
             <span style={styles.subject}>{config.emoji} {config.name}</span>
             <span style={styles.counter}>
               Question {current + 1} of {questions.length}
-              {skipped.size > 0 && <span style={styles.skippedTag}> · {skipped.size} skipped</span>}
+              {skipped.length > 0 && <span style={styles.skippedTag}> · {skipped.size} skipped</span>}
               {isGuest && <span style={styles.guestTag}> · Free Trial</span>}
             </span>
           </div>
@@ -331,7 +331,7 @@ if (session && !isGuest) {
 
           <p style={styles.questionLabel}>
             Question {current + 1}
-            {skipped.has(current) && (
+            {skipped.includes(current) && (
               <span style={{ marginLeft: 10, fontSize: '0.75rem', background: '#FFF3E0', color: '#E67E22', border: '1px solid #FFB74D', borderRadius: 20, padding: '2px 10px', fontWeight: 700 }}>
                 🚩 Skipped — come back to this
               </span>
@@ -420,13 +420,13 @@ if (session && !isGuest) {
           }
         </div>
 
-        {skipped.size > 0 && (
+        {skipped.length > 0 && (
           <div style={styles.skippedPanel}>
             <button
               onClick={() => setShowSkipped(o => !o)}
               style={styles.skippedPanelToggle}
             >
-              🚩 {skipped.size} Skipped Question{skipped.size > 1 ? 's' : ''} {showSkipped ? '▲' : '▼'}
+              🚩 {skipped.length} Skipped Question{skipped.length > 1 ? 's' : ''} {showSkipped ? '▲' : '▼'}
             </button>
             {showSkipped && (
               <div style={styles.skippedList}>
