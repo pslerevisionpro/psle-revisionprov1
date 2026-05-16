@@ -19,6 +19,58 @@ function getMessage(pct, isGuest) {
   return "Don't be discouraged. Every attempt builds knowledge. Read each explanation, then retry."
 }
 
+// ── Skipped Question Review ──────────────────────────────────
+function SkippedReview({ answers, questions }) {
+  const skipped = answers.filter(a => a.selected === null || a.selected === undefined)
+  if (skipped.length === 0) return null
+
+  return (
+    <div style={{ marginTop: 32 }}>
+      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', color: '#E67E22', marginBottom: 6 }}>
+        🚩 Skipped Questions ({skipped.length})
+      </h2>
+      <p style={{ color: 'var(--charcoal-lt)', fontSize: '0.88rem', marginBottom: 20 }}>
+        These questions were left unanswered. Review them so you know what to focus on next time.
+      </p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        {skipped.map((a, i) => {
+          const q = questions?.find(q => q.id === a.questionId)
+          if (!q) return null
+          const correctOptionText = q.options?.[q.correct] ?? '—'
+          return (
+            <div key={i} style={{ ...r.wrongCard, borderColor: '#FFB74D', boxShadow: '0 2px 8px rgba(230,126,34,0.08)' }}>
+              <div style={r.wrongCardHeader}>
+                <div style={r.wrongCardLeft}>
+                  <span style={r.wrongNum}>Q{i + 1}</span>
+                  {q.subject_area && <span style={r.wrongTopic}>{q.subject_area}</span>}
+                </div>
+                <span style={{ ...r.wrongBadge, color: '#E67E22', background: '#FFF3E0' }}>🚩 Skipped</span>
+              </div>
+              {q.context_text && (
+                <div style={r.contextBox}>
+                  <div style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--forest)', marginBottom: 6 }}>📖 Passage</div>
+                  <div style={{ fontSize: '0.88rem', color: 'var(--charcoal)', lineHeight: 1.7, whiteSpace: 'pre-line', maxHeight: 200, overflowY: 'auto' }}>{q.context_text}</div>
+                </div>
+              )}
+              <p style={r.questionText}>{q.question}</p>
+              <div style={{ background: '#eafaf1', border: '1.5px solid var(--success)', borderRadius: 10, padding: '10px 14px', marginBottom: 12 }}>
+                <p style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--success)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>Correct answer</p>
+                <p style={{ fontSize: '0.92rem', fontWeight: 600, color: 'var(--success)' }}>✓ {correctOptionText}</p>
+              </div>
+              {q.explanation && (
+                <div style={r.explanationBox}>
+                  <p style={r.explanationTitle}>💡 Explanation</p>
+                  <p style={r.explanationText}>{q.explanation}</p>
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 // ── Wrong Answer Review ───────────────────────────────────────
 function WrongAnswerReview({ answers, questions }) {
   const wrongAnswers = answers.filter(a => !a.correct)
@@ -136,7 +188,8 @@ export default function Results() {
   const { score, total, pct, subject, answers, questions, isGuest } = state
   const gradeInfo = getGrade(pct)
   const message   = getMessage(pct, isGuest)
-  const wrongCount = answers?.filter(a => !a.correct).length ?? 0
+  const skippedCount = answers?.filter(a => a.selected === null || a.selected === undefined).length ?? 0
+  const wrongCount   = answers?.filter(a => !a.correct && a.selected !== null && a.selected !== undefined).length ?? 0
 
   if (isGuest) {
     sessionStorage.removeItem('rp_guest_mode')
@@ -239,6 +292,7 @@ export default function Results() {
               <StatBox label="Accuracy" value={`${pct}%`}            icon="🎯" />
               <StatBox label="Grade"    value={gradeInfo.grade}       icon="📋" />
               <StatBox label="Missed"   value={wrongCount}            icon="📝" />
+              <StatBox label="Skipped"  value={skippedCount}          icon="🚩" />
             </div>
 
             {/* Wrong answer review */}
@@ -246,16 +300,17 @@ export default function Results() {
               <div style={styles.reviewHeader}>
                 <div>
                   <h2 style={styles.reviewTitle}>
-                    {wrongCount === 0 ? '✅ All Correct!' : `📖 Review Mistakes (${wrongCount})`}
+                    {wrongCount === 0 && skippedCount === 0 ? '✅ All Correct!' : `📖 Wrong Answers (${wrongCount})`}
                   </h2>
                   <p style={styles.reviewSubtitle}>
-                    {wrongCount === 0
+                    {wrongCount === 0 && skippedCount === 0
                       ? 'Perfect score — nothing to review.'
                       : 'Read each explanation carefully. Understanding why you were wrong is how you improve.'}
                   </p>
                 </div>
               </div>
               <WrongAnswerReview answers={answers ?? []} questions={questions ?? []} />
+              <SkippedReview answers={answers ?? []} questions={questions ?? []} />
             </div>
 
             {/* What to do next */}
@@ -348,7 +403,7 @@ const r = {
   wrongTopic:       { fontSize:'0.72rem', fontWeight:700, color:'var(--forest)', background:'#eef7f4', padding:'3px 10px', borderRadius:20 },
   wrongBloom:       { fontSize:'0.7rem', color:'#AAA', background:'#F5F5F5', padding:'3px 8px', borderRadius:20 },
   wrongBadge:       { fontSize:'0.78rem', fontWeight:700, color:'var(--error)', background:'#fdecea', padding:'4px 12px', borderRadius:100 },
-  contextBox:       { background:'#F0F5FF', borderLeft:'3px solid var(--forest-lt)', borderRadius:'0 8px 8px 0', padding:'8px 12px', marginBottom:10, fontSize:'0.85rem', color:'var(--charcoal-lt)', fontStyle:'italic' },
+  contextBox:       { background:'#F0F7FF', border:'1px solid #C7D9F5', borderLeft:'4px solid var(--forest)', borderRadius:'0 8px 8px 0', padding:'14px 16px', marginBottom:14 },
   questionText:     { fontSize:'1rem', fontWeight:600, color:'var(--charcoal)', lineHeight:1.5, marginBottom:16 },
   answerComparison: { display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:16 },
   answerBox:        { border:'1.5px solid #FFD9D9', borderRadius:10, padding:'10px 14px', background:'#FFF8F8' },
