@@ -103,6 +103,7 @@ const { questions: rawQuestions, loading, error } = useQuestions(subject, {
   const [answers, setAnswers] = useState([])
   const [showExplanation, setShowExplanation] = useState(false)
   const [skipped, setSkipped] = useState(new Set())
+  const [showSkipped, setShowSkipped] = useState(false)
 
   // Restore state when navigating to a previously answered question
   useEffect(() => {
@@ -416,6 +417,38 @@ if (session && !isGuest) {
           }
         </div>
 
+        {skipped.size > 0 && (
+          <div style={styles.skippedPanel}>
+            <button
+              onClick={() => setShowSkipped(o => !o)}
+              style={styles.skippedPanelToggle}
+            >
+              🚩 {skipped.size} Skipped Question{skipped.size > 1 ? 's' : ''} {showSkipped ? '▲' : '▼'}
+            </button>
+            {showSkipped && (
+              <div style={styles.skippedList}>
+                <p style={styles.skippedHint}>Tap a question number to jump to it</p>
+                <div style={styles.skippedGrid}>
+                  {[...skipped].sort((a, b) => a - b).map(i => (
+                    <button
+                      key={i}
+                      onClick={() => { setCurrent(i); setShowSkipped(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                      style={{
+                        ...styles.skippedChip,
+                        background: i === current ? 'var(--forest)' : '#FFF3E0',
+                        color: i === current ? '#fff' : '#E67E22',
+                        border: `1.5px solid ${i === current ? 'var(--forest)' : '#FFB74D'}`,
+                      }}
+                    >
+                      Q{i + 1}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         <div style={{ textAlign: 'center', marginTop: 24 }}>
           <Link to="/dashboard" style={{ color: 'var(--charcoal-lt)', fontSize: '0.85rem' }}>← Exit Quiz</Link>
         </div>
@@ -462,6 +495,12 @@ const styles = {
   skipBtn:        { background: 'none', border: '1.5px solid #FFB74D', borderRadius: 8, padding: '10px 22px', fontSize: '0.88rem', fontWeight: 600, color: '#E67E22', cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'all 0.15s' },
   navBar:         { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 24, gap: 12 },
   navBtn:         { background: '#fff', border: '1.5px solid var(--ivory-dk)', borderRadius: 8, padding: '10px 22px', fontSize: '0.88rem', fontWeight: 600, color: 'var(--charcoal-lt)', cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'all 0.15s' },
+  skippedPanel:       { marginTop: 20, border: '1.5px solid #FFB74D', borderRadius: 10, overflow: 'hidden', background: '#FFFBF0' },
+  skippedPanelToggle: { width: '100%', padding: '12px 16px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', fontFamily: 'var(--font-body)', fontSize: '0.88rem', fontWeight: 700, color: '#E67E22', display: 'flex', alignItems: 'center', gap: 8 },
+  skippedList:        { padding: '0 16px 14px' },
+  skippedHint:        { fontSize: '0.75rem', color: 'var(--charcoal-lt)', marginBottom: 10, marginTop: 4 },
+  skippedGrid:        { display: 'flex', flexWrap: 'wrap', gap: 8 },
+  skippedChip:        { padding: '6px 14px', borderRadius: 20, fontSize: '0.82rem', fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'all 0.15s' },
   navBtnPrimary:  { background: 'var(--forest)', border: 'none', borderRadius: 8, padding: '10px 24px', fontSize: '0.95rem', fontWeight: 700, color: 'var(--ivory)', cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'all 0.15s' },
   loadingBar:         { width: 200, height: 4, background: 'var(--ivory-dk)', borderRadius: 4, margin: '24px auto 0', overflow: 'hidden' },
   loadingFill:        { height: '100%', width: '60%', background: 'var(--forest)', borderRadius: 4, animation: 'pulse 1.4s ease-in-out infinite' },
