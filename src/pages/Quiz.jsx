@@ -103,6 +103,23 @@ const { questions: rawQuestions, loading, error } = useQuestions(subject, {
   const [answers, setAnswers] = useState([])
   const [showExplanation, setShowExplanation] = useState(false)
   const [skipped, setSkipped] = useState(new Set())
+
+  // Restore state when navigating to a previously answered question
+  useEffect(() => {
+    if (questions.length === 0) return
+    const q = questions[current]
+    if (!q) return
+    const existing = answers.find(a => a.questionId === q.id)
+    if (existing) {
+      setSelected(existing.selected)
+      setRevealed(true)
+      setTimeout(() => setShowExplanation(true), 100)
+    } else {
+      setSelected(null)
+      setRevealed(false)
+      setShowExplanation(false)
+    }
+  }, [current, questions])
   const explanationRef = useRef(null)
 
   // ── Subject not found ──────────────────────────────────────
@@ -175,23 +192,6 @@ const { questions: rawQuestions, loading, error } = useQuestions(subject, {
       correct: optionIndex === question.correct,
     }])
   }
-
-  // Restore revealed/selected state when navigating back to answered question
-  useEffect(() => {
-    if (questions.length === 0) return
-    const q = questions[current]
-    if (!q) return
-    const existing = answers.find(a => a.questionId === q.id)
-    if (existing) {
-      setSelected(existing.selected)
-      setRevealed(true)
-      setTimeout(() => setShowExplanation(true), 100)
-    } else {
-      setSelected(null)
-      setRevealed(false)
-      setShowExplanation(false)
-    }
-  }, [current, questions])
 
   function handleBack() {
     if (current > 0) {
